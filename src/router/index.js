@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
@@ -17,7 +16,7 @@ export default new Router({
       children: [
         {
           path: '/helloHome',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/index.vue'),
+          component: () => import('../components/page/index.vue'),
           meta: { title: '首页' }
         },
         {
@@ -30,11 +29,7 @@ export default new Router({
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/carts.vue'),
           meta: { title: '购物车' }
         },
-        {
-          path: '/collection',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/collection.vue'),
-          meta: { title: '我的收藏' }
-        },
+
         {
           path: '/myOrders',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/myOrders.vue'),

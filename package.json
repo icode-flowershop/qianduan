@@ -13,6 +13,8 @@
     "axios": "^0.20.0",
     "element-china-area-data": "^5.0.2",
     "element-ui": "^2.13.2",
+    "jquery": "^3.6.0",
+    "save-dev": "^0.0.1-security",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

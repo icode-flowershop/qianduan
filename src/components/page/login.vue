@@ -1,104 +1,265 @@
 <template>
-    <div class="login-wrap">
-        <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
-            <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input
-                        type="password"
-                        placeholder="password"
-                        v-model="param.password"
-                        @keyup.enter.native="submitForm()"
-                    >
-                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
-                    </el-input>
-                </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm()">登录</el-button>
-                </div>
+    <div class="animated bounceInDown">
+        <div class="container">
+            <span class="error animated tada" id="msg"></span>
+            <form name="form1" class="box" onsubmit="return checkStuff()">
+                <h4>BELOVING商城</h4>
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="账号"
+                    autocomplete="off"
+                    v-model="username"
+                />
+                <i class="typcn typcn-eye" id="eye"></i>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="密码"
+                    id="pwd"
+                    autocomplete="off"
+                    v-model="pwd"
+                />
+               <a href="#" class="dnthave ">注册</a>
+                <a href="#" class="forgetpass" @click="forgetPwd">忘记密码?</a>
+                <input
+                    type="submit"
+                    value="登 录"
+                    class="btn1"
+                    @click="login"
+                />
+            </form>
 
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
-            </el-form>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    data: function() {
+    data() {
         return {
-            param: {
-                username: 'admin',
-                password: '123123',
-            },
-            rules: {
-                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-            },
+            username: "",
+            pwd: "",
         };
     },
     methods: {
-        submitForm() {
-            this.$refs.login.validate(valid => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+        login() {
+          this.axios.post('./login',{username: this.username,pwd:this.pwd})
+          .then((resp)=>{
+            if(resp.data.code == 200){
+              this.$message.success("登录成功");
+            this.$router.push("/");
+            }
+            if(resp.data.code ==400){
+              this.$message.fail("登录失败");
+            }
+          }).catch((err)=>{
+            this.message.warning(err.message);
+          })
+            console.log("username:" + this.username + "pwd:" + this.pwd);
         },
+        forgetPwd(){
+          this.$message.warning("请联系管理员 QQ:1035821043")
+
+        }
     },
 };
 </script>
 
-<style scoped>
-.login-wrap {
-    position: relative;
+<style>
+body {
+    /* background: url(../img/1.jpg); */
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+#particles-js {
+    position: absolute;
     width: 100%;
     height: 100%;
-    background-size: 100%;
 }
-.ms-title {
-    width: 100%;
-    line-height: 50px;
-    text-align: center;
-    font-size: 20px;
-    color: #fff;
-    border-bottom: 1px solid #ddd;
-}
-.ms-login {
-    position: absolute;
+
+.container {
+    margin: 0;
+    top: 50px;
     left: 50%;
-    top: 50%;
-    width: 350px;
-    margin: -190px 0 0 -175px;
+    position: absolute;
+    text-align: center;
+    transform: translateX(-50%);
+    background-color: rgb(33, 41, 66);
+    border-radius: 9px;
+    border-top: 10px solid #79a6fe;
+    border-bottom: 10px solid #8bd17c;
+    width: 400px;
+    height: 500px;
+    box-shadow: 1px 1px 108.8px 19.2px rgb(25, 31, 53);
+}
+
+.box h4 {
+    font-family: "Source Sans Pro", sans-serif;
+    color: #5c6bc0;
+    font-size: 18px;
+    margin-top: 94px;
+}
+
+.box h4 span {
+    color: #dfdeee;
+    font-weight: lighter;
+}
+
+.box h5 {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 13px;
+    color: #a1a4ad;
+    letter-spacing: 1.5px;
+    margin-top: -15px;
+    margin-bottom: 70px;
+}
+
+.box input[type="text"],
+.box input[type="password"] {
+    display: block;
+    margin: 20px auto;
+    background: #262e49;
+    border: 0;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    overflow: hidden;
+    padding: 14px 10px;
+    width: 320px;
+    outline: none;
+    color: #d6d6d6;
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -ms-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
 }
-.ms-content {
-    padding: 30px 30px;
+::-webkit-input-placeholder {
+    color: #565f79;
 }
-.login-btn {
+
+.box input[type="text"]:focus,
+.box input[type="password"]:focus {
+    border: 1px solid #79a6fe;
+}
+
+a {
+    color: #5c7fda;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+label input[type="checkbox"] {
+    display: none; /* hide the default checkbox */
+}
+
+/* style the artificial checkbox */
+label span {
+    height: 13px;
+    width: 13px;
+    border: 2px solid #464d64;
+    border-radius: 2px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+
+    left: 7.5%;
+}
+
+.btn1 {
+    border: 0;
+    background: #7f5feb;
+    color: #dfdeee;
+    border-radius: 100px;
+    width: 340px;
+    height: 49px;
+    font-size: 16px;
+    position: absolute;
+    top: 79%;
+    left: 8%;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.btn1:hover {
+    background: #5d33e6;
+}
+
+.rmb {
+    position: absolute;
+    margin-left: -24%;
+    margin-top: 0px;
+    color: #dfdeee;
+    font-size: 13px;
+}
+
+.forgetpass {
+    position: relative;
+    float: right;
+    right: 28px;
+}
+
+.dnthave {
+    position: relative;
+    top: 92%;
+    left: 24%;
+}
+
+[type="checkbox"]:checked + span:before {
+    /* <-- style its checked state */
+    font-family: FontAwesome;
+    font-size: 16px;
+    content: "\f00c";
+    position: absolute;
+    top: -4px;
+    color: #896cec;
+    left: -1px;
+    width: 13px;
+}
+
+.typcn {
+    position: absolute;
+    left: 339px;
+    top: 282px;
+    color: #3b476b;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.typcn.active {
+    color: #7f60eb;
+}
+
+.error {
+    background: #ff3333;
+    text-align: center;
+    width: 337px;
+    height: 20px;
+    padding: 2px;
+    border: 0;
+    border-radius: 5px;
+    margin: 10px auto 10px;
+    position: absolute;
+    top: 31%;
+    left: 7.2%;
+    color: white;
+    display: none;
+}
+
+.footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    top: 605px;
+    width: 100%;
+    color: #78797d;
+    font-size: 14px;
     text-align: center;
 }
-.login-btn button {
-    width: 100%;
-    height: 36px;
-    margin-bottom: 10px;
-}
-.login-tips {
-    font-size: 12px;
-    line-height: 30px;
-    color: #fff;
+
+.footer .fa {
+    color: #7f5feb;
 }
 </style>

@@ -43,22 +43,7 @@
       <button class="addbtn2" @click="addVis=!addVis">
         添加
       </button>
-<!--      <div class="addbtn"-->
-<!--           :style="seen==0?'background: #00a854;':'background: #4D6530;'"-->
-<!--           @mouseenter="enter()"-->
-<!--           @mouseleave="leave()"-->
-<!--            @click="addVis=!addVis">-->
-<!--        <div style="background: black;width: 8%;height: 35%;margin-left: 46%;margin-top: 18%;border-radius: 5px;">-->
 
-<!--        </div>-->
-<!--        <div style="background: black;width: 70%;height: 8%;margin-left: 15%;margin-top: -5%;border-radius: 5px;">-->
-
-<!--        </div>-->
-<!--        <div style="background: black;width: 8%;height: 35%;margin-left: 46%;margin-top: -5%;border-radius: 5px;">-->
-
-<!--        </div>-->
-
-<!--      </div>-->
 
 
     </div>
