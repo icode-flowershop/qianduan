@@ -1,8 +1,8 @@
 <template>
-    <div class="animated bounceInDown">
-        <div class="container">
+    <div id="all">
+        <div class="container1">
             <span class="error animated tada" id="msg"></span>
-            <form name="form1" class="box" onsubmit="return checkStuff()">
+            <form name="form1" class="box">
                 <h4>BELOVING商城</h4>
                 <input
                     type="text"
@@ -20,7 +20,9 @@
                     autocomplete="off"
                     v-model="pwd"
                 />
-               <a href="#" class="dnthave ">注册</a>
+                <a href="#" class="dnthave" id="register" @click="registerShow"
+                    >注册</a
+                >
                 <a href="#" class="forgetpass" @click="forgetPwd">忘记密码?</a>
                 <input
                     type="submit"
@@ -29,7 +31,38 @@
                     @click="login"
                 />
             </form>
-
+        </div>
+        <div class="container2">
+            <span class="error animated tada" id="msg"></span>
+            <form name="form1" class="box">
+                <h4>填写注册信息</h4>
+                <input
+                    type="text"
+                    id="_user"
+                    placeholder="账号"
+                    autocomplete="off"
+                />
+                <i class="typcn typcn-eye" id="eye"></i>
+                <input
+                    type="password"
+                    id="_pwd"
+                    placeholder="密码"
+                    autocomplete="off"
+                />
+                <input
+                 type="text"
+                  id="_phone"
+                    placeholder="手机号"
+                    autocomplete="off"
+                 />
+                 <input
+                 type="text"
+                  id="_email"
+                    placeholder="邮箱"
+                    autocomplete="off"
+                 />
+                <input type="submit" value="注册" class="btn1" @click="registerInfo" />
+            </form>
         </div>
     </div>
 </template>
@@ -44,33 +77,69 @@ export default {
     },
     methods: {
         login() {
-          this.axios.post('./login',{username: this.username,pwd:this.pwd})
-          .then((resp)=>{
-            if(resp.data.code == 200){
-              this.$message.success("登录成功");
-            this.$router.push("/");
-            }
-            if(resp.data.code ==400){
-              this.$message.fail("登录失败");
-            }
-          }).catch((err)=>{
-            this.message.warning(err.message);
-          })
-            console.log("username:" + this.username + "pwd:" + this.pwd);
+            this.axios
+                .get(
+                    `/api/beloving/login?username=${this.username}&password=${this.pwd}`
+                )
+                .then((resp) => {
+                    console.log(resp);
+                    console.log(
+                        "username:" + this.username + "pwd:" + this.pwd
+                    );
+                    console.log(resp.status);
+                    if (resp.data) {
+                        this.$message.success("登录成功");
+                        this.$router.push("/");
+                    } else {
+                        this.$message.fail("登录失败");
+                    }
+                })
+                .catch((err) => {
+                    this.message.warning(err.message);
+                });
         },
-        forgetPwd(){
-          this.$message.warning("请联系管理员 QQ:1035821043")
+        forgetPwd() {
+            this.$message.warning("请联系管理员 QQ:1035821043");
+        },
+        registerShow() {
+            $(".container1").css("left", "40%");
+            $(".container2").css("display", "block");
+        },
+        registerInfo() {
+          let user={
+            'name': $('#_user').innerHTML,
+            'password': $('#_password').innerHTML,
+            'phone':$('#_phone').innerHTML,
+            'email':$('#_email').innerHTML
+          }
+          console.log(user.name)
 
+          $(".container1").css("left", "50%");
+           // $(".container2").css("display", "none");
+
+            this.axios.post('/api/beloving/register',{
+              username:user.name,
+              password:user.password,
+              phone:user.phone,
+              email:user.email
+            })
+            .then((response) => {
+              console.log(response);
+
+            })
         }
     },
 };
 </script>
 
 <style>
-body {
-    /* background: url(../img/1.jpg); */
+#all {
+    height: 100%;
     background-repeat: no-repeat;
     background-size: 100% auto;
+    background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
+    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+    background-attachment: fixed;
 }
 
 #particles-js {
@@ -79,20 +148,26 @@ body {
     height: 100%;
 }
 
-.container {
+.container1,
+.container2 {
     margin: 0;
     top: 50px;
     left: 50%;
     position: absolute;
     text-align: center;
     transform: translateX(-50%);
-    background-color: rgb(33, 41, 66);
     border-radius: 9px;
-    border-top: 10px solid #79a6fe;
-    border-bottom: 10px solid #8bd17c;
-    width: 400px;
-    height: 500px;
-    box-shadow: 1px 1px 108.8px 19.2px rgb(25, 31, 53);
+    border-top: 0px solid;
+    border-bottom: 0px solid;
+    width: 30%;
+    height: 70%;
+    box-shadow: 1px 1px 108.8px 19.2px rgb(192, 212, 210);
+    background-image: linear-gradient(-225deg, #e3fdf5 50%, #ffe6fa 50%);
+}
+.container2 {
+    display: none;
+    left: 70%;
+    background-image: linear-gradient(-225deg, #ffe6fa 50%, #e3fdf5 50%);
 }
 
 .box h4 {
@@ -121,6 +196,7 @@ body {
     display: block;
     margin: 20px auto;
     background: #262e49;
+
     border: 0;
     border-radius: 5px;
     padding: 14px 10px;

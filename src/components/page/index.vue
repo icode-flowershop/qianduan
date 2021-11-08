@@ -4,7 +4,7 @@
 
     <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
       <el-carousel-item v-for="item in imageList" :key="item.id">
-        <img :src="item.address">
+        <img src="../../assets/img/001.jpeg">
       </el-carousel-item>
     </el-carousel>
     <br>
@@ -38,7 +38,7 @@
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
                       <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>
                     </div>
-                    <img src="../../assets/img/01.jpeg" style="height: 100%;width: 100%">
+                    <img src="../../assets/img/02.jpeg" style="height: 100%;width: 100%">
                     <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">双十一狂欢{{item.id}}号</span></span>
                   </div>
                 </div>
@@ -77,9 +77,10 @@
           currentDate: new Date(),
           imageList:[
             {id:1,title:"test1", address:"../../assets/img/01.jpeg"},
-            {id:2,title:"test2", address:""},
-            {id:3,title:"test3", address:""},
-            {id:4,title:"test4", address:""},
+            {id:2,title:"test1", address:"../../assets/img/01.jpeg"},
+            {id:3,title:"test1", address:"../../assets/img/01.jpeg"},
+            {id:4,title:"test1", address:"../../assets/img/01.jpeg"},
+
 
           ],
           goodsList:[
@@ -121,6 +122,9 @@
     opacity: 0.75;
     line-height: 200px;
     margin: 0;
+  }
+  .el-carousel__item img {
+    width: 100%;
   }
   /**
   隐藏页
