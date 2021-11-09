@@ -36,10 +36,9 @@
                     <!--鼠标移入移出事件-->
                     <div class="handleDialog" v-if="ishow && index==current">
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
-                      <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>
                     </div>
                     <img src="../../assets/img/02.jpeg" style="height: 100%;width: 100%">
-                    <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">双十一狂欢{{item.id}}号</span></span>
+                    <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">{{item.goodname}}</span></span>
                   </div>
                 </div>
                 <div style="text-align:center">
@@ -84,20 +83,37 @@
 
           ],
           goodsList:[
-            {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"华为官方旗舰店"},
-            {id:2,name:"康乃馨", img:"https://img13.360buyimg.com/n1/s450x450_jfs/t1/136135/36/11503/129859/5f769f36E0a120157/a7bddadf2b8ae6d8.jpg",prize:"2799.00 ",desc:"华为官方旗舰店"},
-            {id:3,name:"牡丹", img:"https://img10.360buyimg.com/n1/jfs/t1/122621/1/15816/121959/5f8ee259E2d2178c6/017ac237a18d2346.jpg",prize:"5766.00",desc:"联想官方旗舰店"},
+            {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"爱他就买它",goodname:'花中君子'},
+            {id:2,name:"康乃馨", img:"",prize:"2799.00 ",desc:"他值得拥有"},
+            {id:3,name:"牡丹", img:"",prize:"5766.00",desc:"偶买噶"},
 
           ]
         };
       },
+    /*   mounted:{
+        showShufflingFigure(){
+          this.axios.post('/api/beloving/shuffling').then((resp) => {
+            this.imagelist =resp.data;
+            console.log(resp);
+          })
+
+        },
+        getAllGoods(){
+          this.axios.get('/api/beloving/goodsList')
+          .then((resp)=>{
+            console.log(resp)
+            this.goodsList = resp.data;
+
+          })
+        },
+      }, */
       methods:{
         //前往商品详情页
-        goGoodsDesc(goods) {
+        goGoodsDesc(goodId) {
           this.$router.push({
             path:'/goodsDesc',
             query:{
-              goods:goods
+              goodId:goodId
             }
           });
         },
@@ -222,8 +238,15 @@
     -moz-transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
     -o-transform: rotate(45deg);
-    border: 1px dashed;
-    box-shadow: 0 0 0 3px #57DD43, 0px 21px 5px -18px rgba(0, 0, 0, 0.6);
-    background: #57DD43;
+    border: 1px solid #4D6530;
+     box-shadow: 1px 1px 108.8px 19.2px rgb(192, 212, 210);
+
+  }
+  .ribbon6:nth-child(odd){
+    background: linear-gradient(-225deg, #02412e 50%, #6e626c 50%);
+  }
+  .ribbon6:nth-child(even){
+        background: linear-gradient(-225deg, #e3fdf5 50%, #ffe6fa 50%);
+
   }
 </style>

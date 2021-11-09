@@ -11,7 +11,7 @@
         <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../assets/img/logo.png">
 
            <i class="el-icon-back" @click="goBackPath" id="back"></i>
-           <i class="el-icon-right" @click="goNextPath" id="next"></i>
+         <!--   <i class="el-icon-right" @click="goNextPath" id="next"></i> -->
 
       </div>
 
@@ -89,13 +89,13 @@
         this.$router.push('/');
       }
     },
-    goNextPath(){
+    /* goNextPath(){
       if(window.history.length>1){
         this.$router.go();
       }else{
         this.$router.push('/');
       }
-    }
+    } */
     },
     mounted() {
       if (document.body.clientWidth < 1500) {

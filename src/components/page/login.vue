@@ -78,13 +78,12 @@ export default {
         return {
             username: "",
             pwd: "",
-            identity: 0,
+            role: 0,
             user: {
                 name: "",
                 password: "",
                 phone: "",
                 email: "",
-                info: 0,
             },
         };
     },
@@ -92,22 +91,13 @@ export default {
         login() {
             this.axios
                 .get(
-                    `/api/beloving/login?username=${this.username}&password=${this.pwd}&who=${this.identity}`
+                    `/api/beloving/login?username=${this.username}&password=${this.pwd}&role=${this.role}`
                 )
                 .then((resp) => {
-                    console.log(resp);
-                    console.log(
-                        "username:" + this.username + "pwd:" + this.pwd
-                    );
-                    console.log(resp.status);
                     if (resp.data) {
                         this.$message.success("登录成功");
-                         setTimeout(() => {
-            this.$router.push({
-              path: '/helloHome'
-            });
-          }, 100);
-                        //this.$router.push("/helloHome");
+
+                        this.$router.push("/helloHome");
                     } else {
                         this.$message.warning("账号密码错误,登录失败");
                     }
@@ -115,6 +105,7 @@ export default {
                 .catch((err) => {
                     this.message.warning(err.message);
                 });
+
         },
         forgetPwd() {
             this.$message.warning("请联系管理员 QQ:1035821043");
@@ -122,6 +113,10 @@ export default {
         registerShow() {
             $(".container1").css("left", "40%");
             $(".container2").css("display", "block");
+        },
+        registerClose() {
+            $(".container1").css("left", "50%");
+            $(".container2").css("display", "none");
         },
         registerInfo() {
             this.user.name = $("#_user").val();
@@ -133,17 +128,15 @@ export default {
 
             this.axios
                 .get(
-                `/api/beloving/register?username=${this.user.name}&password=
-                ${this.user.password}&phone=${this.user.phone}&email=${this.user.email}`
+                    `/api/beloving/register?username=${this.user.name}&password=
+                ${this.user.password}&phone=${this.user.phone}&email=${this.user.email}&role=${this.role}`
                 )
                 .then((response) => {
                     console.log(response);
-                    this.$message.success("注册成功")
+                    this.$message.success("注册成功");
                 });
 
-            /* 隐藏注册框 */
-            $(".container1").css("left", "50%");
-            $(".container2").css("display", "none");
+            this.registerClose();
         },
     },
 };
