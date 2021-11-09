@@ -45,23 +45,28 @@
                 <i class="typcn typcn-eye" id="eye"></i>
                 <input
                     type="password"
-                    id="_pwd"
+                    id="_password"
                     placeholder="密码"
                     autocomplete="off"
                 />
                 <input
-                 type="text"
-                  id="_phone"
+                    type="text"
+                    id="_phone"
                     placeholder="手机号"
                     autocomplete="off"
-                 />
-                 <input
-                 type="text"
-                  id="_email"
+                />
+                <input
+                    type="text"
+                    id="_email"
                     placeholder="邮箱"
                     autocomplete="off"
-                 />
-                <input type="submit" value="注册" class="btn1" @click="registerInfo" />
+                />
+                <input
+                    type="submit"
+                    value="注册"
+                    class="btn1"
+                    @click="registerInfo"
+                />
             </form>
         </div>
     </div>
@@ -73,13 +78,21 @@ export default {
         return {
             username: "",
             pwd: "",
+            identity: 0,
+            user: {
+                name: "",
+                password: "",
+                phone: "",
+                email: "",
+                info: 0,
+            },
         };
     },
     methods: {
         login() {
             this.axios
                 .get(
-                    `/api/beloving/login?username=${this.username}&password=${this.pwd}`
+                    `/api/beloving/login?username=${this.username}&password=${this.pwd}&who=${this.identity}`
                 )
                 .then((resp) => {
                     console.log(resp);
@@ -89,9 +102,14 @@ export default {
                     console.log(resp.status);
                     if (resp.data) {
                         this.$message.success("登录成功");
-                        this.$router.push("/");
+                         setTimeout(() => {
+            this.$router.push({
+              path: '/helloHome'
+            });
+          }, 100);
+                        //this.$router.push("/helloHome");
                     } else {
-                        this.$message.fail("登录失败");
+                        this.$message.warning("账号密码错误,登录失败");
                     }
                 })
                 .catch((err) => {
@@ -106,28 +124,27 @@ export default {
             $(".container2").css("display", "block");
         },
         registerInfo() {
-          let user={
-            'name': $('#_user').innerHTML,
-            'password': $('#_password').innerHTML,
-            'phone':$('#_phone').innerHTML,
-            'email':$('#_email').innerHTML
-          }
-          console.log(user.name)
+            this.user.name = $("#_user").val();
+            this.user.password = $("#_password").val();
+            this.user.phone = $("#_phone").val();
+            this.user.email = $("#_email").val();
 
-          $(".container1").css("left", "50%");
-           // $(".container2").css("display", "none");
+            console.log(this.user);
 
-            this.axios.post('/api/beloving/register',{
-              username:user.name,
-              password:user.password,
-              phone:user.phone,
-              email:user.email
-            })
-            .then((response) => {
-              console.log(response);
+            this.axios
+                .get(
+                `/api/beloving/register?username=${this.user.name}&password=
+                ${this.user.password}&phone=${this.user.phone}&email=${this.user.email}`
+                )
+                .then((response) => {
+                    console.log(response);
+                    this.$message.success("注册成功")
+                });
 
-            })
-        }
+            /* 隐藏注册框 */
+            $(".container1").css("left", "50%");
+            $(".container2").css("display", "none");
+        },
     },
 };
 </script>
