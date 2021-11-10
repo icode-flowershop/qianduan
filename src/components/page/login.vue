@@ -112,7 +112,7 @@ export default {
 
                         if (this.checkIdentity) {
                             //push到后台路由
-                            this.$router.push("/goodsDesc")
+                            this.$router.push("/backHome")
                         } else {
                             this.$router.push("/helloHome");
                         }

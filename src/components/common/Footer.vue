@@ -16,7 +16,6 @@
       </a>
     </div>
     <div class="footer" style="margin-top: 90px;margin-bottom: 0px">
-        <hr />
 
 
     </div>

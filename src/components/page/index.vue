@@ -37,14 +37,18 @@
                     <div class="handleDialog" v-if="ishow && index==current">
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
                     </div>
-                    <img src="../../assets/img/02.jpeg" style="height: 100%;width: 100%">
-                    <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">{{item.desc}}</span></span>
+                    <img :src="item.img" style="height: 100%;width: 100%">
+                  <!--
+                    //商品彩带
+                      <div class="wrap">】
+                        <span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">{{item.fname}}</span></span>
                   </div>
+                   -->
                 </div>
                 <div style="text-align:center">
-                  <span>{{item.name}}</span>
-                  <span>&yen;{{item.prize}}</span>
-                  <span>{{item.desc}}</span>
+                  <span>{{item.fname}}</span>
+                  <span>&yen;{{item.price}}</span>
+                  <span style="overflow:hidden">{{item.says}}</span>
                 </div>
               </div>
         </div>
@@ -83,31 +87,35 @@
 
           ],
           goodsList:[
-            {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"爱他就买它"},
+           /*  {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"爱他就买它"},
             {id:2,name:"康乃馨", img:"",prize:"2799.00 ",desc:"他值得拥有"},
-            {id:3,name:"牡丹", img:"",prize:"5766.00",desc:"偶买噶"},
+            {id:3,name:"牡丹", img:"",prize:"5766.00",desc:"偶买噶"}, */
 
           ]
         };
       },
-    /*   mounted:{
-        showShufflingFigure(){
+      mounted(){
+        this.getAllGoods();
+
+
+      },
+      methods:{
+         showShufflingFigure(){
           this.axios.post('/api/beloving/shuffling').then((resp) => {
             this.imagelist =resp.data;
             console.log(resp);
           })
 
         },
+
         getAllGoods(){
-          this.axios.get('/api/beloving/goodsList')
+          this.axios.get('/api/beloving/home')
           .then((resp)=>{
             console.log(resp)
             this.goodsList = resp.data;
 
           })
         },
-      }, */
-      methods:{
         //前往商品详情页
         goGoodsDesc(goodId) {
           this.$router.push({
@@ -166,6 +174,9 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 4px;
     float: left;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .card img {
     width: 100%;

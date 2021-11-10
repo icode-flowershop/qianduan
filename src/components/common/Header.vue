@@ -123,6 +123,7 @@
     height: 70px;
     font-size: 22px;
     color: #fff;
+    background-color: rgb(121, 124, 94);
   }
   .collapse-btn {
     float: left;
