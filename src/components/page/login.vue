@@ -25,6 +25,13 @@
                 >
                 <a href="#" class="forgetpass" @click="forgetPwd">忘记密码?</a>
                 <input
+                    type="checkbox"
+                    name=""
+                    id="changeRole"
+                    v-model="checkIdentity"
+                /><span>管理员登录</span>
+
+                <input
                     type="submit"
                     value="登 录"
                     class="btn1"
@@ -79,6 +86,7 @@ export default {
             username: "",
             pwd: "",
             role: 0,
+            checkIdentity: false,
             user: {
                 name: "",
                 password: "",
@@ -87,8 +95,13 @@ export default {
             },
         };
     },
+
     methods: {
         login() {
+            if (this.checkIdentity) {
+                this.role = 1;
+            }
+
             this.axios
                 .get(
                     `/api/beloving/login?username=${this.username}&password=${this.pwd}&role=${this.role}`
@@ -97,7 +110,12 @@ export default {
                     if (resp.data) {
                         this.$message.success("登录成功");
 
-                        this.$router.push("/helloHome");
+                        if (this.checkIdentity) {
+                            //push到后台路由
+                            this.$router.push("/goodsDesc")
+                        } else {
+                            this.$router.push("/helloHome");
+                        }
                     } else {
                         this.$message.warning("账号密码错误,登录失败");
                     }
@@ -105,7 +123,6 @@ export default {
                 .catch((err) => {
                     this.message.warning(err.message);
                 });
-
         },
         forgetPwd() {
             this.$message.warning("请联系管理员 QQ:1035821043");
@@ -118,25 +135,34 @@ export default {
             $(".container1").css("left", "50%");
             $(".container2").css("display", "none");
         },
+
+        /*  */
+        verifyRegisterInfo(user) {
+            if (!user.name && !user.password && !user.phone && !user.email) {
+                return 1;
+            } else {
+                this.$message.warning("注册信息不能为空");
+                return 0;
+            }
+        },
         registerInfo() {
             this.user.name = $("#_user").val();
             this.user.password = $("#_password").val();
             this.user.phone = $("#_phone").val();
             this.user.email = $("#_email").val();
 
-            console.log(this.user);
-
-            this.axios
-                .get(
-                    `/api/beloving/register?username=${this.user.name}&password=
+            if (this.verifyRegisterInfo(this.user)) {
+                this.axios
+                    .get(
+                        `/api/beloving/register?username=${this.user.name}&password=
                 ${this.user.password}&phone=${this.user.phone}&email=${this.user.email}&role=${this.role}`
-                )
-                .then((response) => {
-                    console.log(response);
-                    this.$message.success("注册成功");
-                });
-
-            this.registerClose();
+                    )
+                    .then((response) => {
+                        console.log(response);
+                        this.$message.success("注册成功");
+                    });
+                this.registerClose();
+            }
         },
     },
 };
@@ -286,11 +312,14 @@ label span {
     float: right;
     right: 28px;
 }
+#changeRole {
+    position: relative;
+}
 
 .dnthave {
     position: relative;
     top: 92%;
-    left: 24%;
+    left: 38%;
 }
 
 [type="checkbox"]:checked + span:before {

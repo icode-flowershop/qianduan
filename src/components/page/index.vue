@@ -38,7 +38,7 @@
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
                     </div>
                     <img src="../../assets/img/02.jpeg" style="height: 100%;width: 100%">
-                    <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">{{item.goodname}}</span></span>
+                    <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">{{item.desc}}</span></span>
                   </div>
                 </div>
                 <div style="text-align:center">
@@ -83,7 +83,7 @@
 
           ],
           goodsList:[
-            {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"爱他就买它",goodname:'花中君子'},
+            {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"爱他就买它"},
             {id:2,name:"康乃馨", img:"",prize:"2799.00 ",desc:"他值得拥有"},
             {id:3,name:"牡丹", img:"",prize:"5766.00",desc:"偶买噶"},
 
