@@ -83,13 +83,8 @@
             {id:2,title:"test1", address:"../../assets/img/01.jpeg"},
             {id:3,title:"test1", address:"../../assets/img/01.jpeg"},
             {id:4,title:"test1", address:"../../assets/img/01.jpeg"},
-
-
           ],
           goodsList:[
-           /*  {id:1,name:"红玫瑰", img:"../../assets/img/01.jpeg",prize:"5999.00",desc:"爱他就买它"},
-            {id:2,name:"康乃馨", img:"",prize:"2799.00 ",desc:"他值得拥有"},
-            {id:3,name:"牡丹", img:"",prize:"5766.00",desc:"偶买噶"}, */
 
           ]
         };
