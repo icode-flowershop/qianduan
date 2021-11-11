@@ -50,7 +50,7 @@
                         </p>
                     </div>
                 </div>
-<span>数量：</span>
+                <span>数量：</span>
                 <el-input-number
                     size="large"
                     v-model="num"
@@ -59,9 +59,13 @@
                     @change="handleChange"
                     label="商品数量"
                 ></el-input-number>
-                <el-button id='addCart'
-                size="medium" type="danger" @click="add1"
-                    >加入购物车</el-button>
+                <el-button
+                    id="addCart"
+                    size="medium"
+                    type="danger"
+                    @click="add1"
+                    >加入购物车</el-button
+                >
                 <p style="color: #777777">{{ tips }}</p>
             </div>
         </div>
@@ -87,8 +91,7 @@ export default {
                 inventory: 0,
             },
             num: 1,
-            value: 3.7,
-            tips: "温馨提示·支持X天无理由退货",
+            tips: "温馨提示·不支持7天无理由退货",
 
             //隐形窗口
             ishow: false,
@@ -112,7 +115,7 @@ export default {
         //数据更新
         getdate() {
             this.axios
-                .get("/api/beloving/detail?id=" + this.goodsId)
+                .get("/api/beloving/flowerDetail?id=" + this.goodsId)
                 .then((resp) => {
                     this.goodsInfo = resp.data;
                 });
@@ -219,8 +222,8 @@ export default {
 .info-price-bottom p {
     float: right;
 }
-#addCart{
-  margin-left: 90px;
+#addCart {
+    margin-left: 90px;
 }
 
 /**
