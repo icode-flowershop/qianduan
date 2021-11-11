@@ -42,6 +42,10 @@
               </el-submenu>
             </el-menu>
           </el-aside>
+      <el-main style="flex-grow:1;">
+        <!-- 路由占位符 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -63,21 +67,6 @@ export default {
       },
       isCollapse: false, // 是否折叠属性
       activePath: '',
-      welcome: {
-        authName: '欢迎光临',
-        id: 147,
-        order: 1,
-        path: '/welcome',
-        children: [
-          {
-            authName: 'Welcome',
-            id: 124,
-            order: 1,
-            path: 'welcome',
-            children: []
-          }
-        ]
-      }
     }
   },
   created() {
@@ -91,21 +80,118 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList() {
-      const { data: res } = await this.$http.get('/menus')
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.$message.success(res.meta.msg)
-      res.data.unshift(this.welcome)
-      this.menuList = res.data
-      console.log(res, 'menus')
+      this.menuList = [
+        {
+          authName: '欢迎光临',
+          id: 147,
+          order: 1,
+          path: 'backWelcome',
+          children: [
+            {
+              authName: 'Welcome',
+              id: 124,
+              order: 1,
+              path: 'backWelcome',
+              children: []
+            }
+          ]
+        },
+        {
+          authName: '用户管理',
+          id: 125,
+          order: 1,
+          path: 'backWelcome',
+          children: [
+            {
+              authName: "用户列表",
+              id: 110,
+              order: null,
+              path: 'backWelcome',
+              children: []
+            }]
+        },
+        {
+          authName: '权限管理',
+          id: 103,
+          order: 2,
+          path: 'backWelcome',
+          children: [
+            {
+              authName: '权限列表',
+              id: 112,
+              order: null,
+              path: 'backWelcome',
+              children: []
+            }]
+        },
+        {
+          authName: '商品管理',
+          id: 101,
+          order: 3,
+          path: 'backWelcome',
+          children: [
+            {
+              authName: '商品列表',
+              id: 104,
+              order: 1,
+              path: 'backGoods',
+              children: []
+            },
+            {
+              authName: '分类参数',
+              id: 115,
+              order: 2,
+              path: 'backWelcome',
+              children: []
+            },
+            {
+              authName: '商品分类',
+              id: 121,
+              order: 3,
+              path: 'backWelcome',
+              children: []
+            }
+          ]
+        },
+        {
+          authName: '订单管理',
+          id: 102,
+          order: 4,
+          path: 'backWelcome',
+          children: [
+            {
+              authName: '订单列表',
+              id: 107,
+              order: null,
+              path: 'backWelcome',
+              children: []
+            }
+          ]
+        },
+        {
+          authName: '数据统计',
+          id: 145,
+          order: 5,
+          path: 'backWelcome',
+          children: [
+            {
+              authName: '订单列表',
+              id: 146,
+              order: null,
+              path: 'backWelcome',
+              children: []
+            }
+          ]
+        }
+        ]
     },
-    // 点击按钮,切换菜单的折叠和展开
     toggleCollpase() {
       this.isCollapse = !this.isCollapse
     },
     saveActivePath(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
-      // console.log(this.$route.path)
+      console.log('荆棘' + this.$route.path)
     }
   }
 }
@@ -166,5 +252,8 @@ export default {
   color: #fff;
   letter-spacing: 0.2em;
   cursor: pointer;
+}
+el-menu {
+
 }
 </style>

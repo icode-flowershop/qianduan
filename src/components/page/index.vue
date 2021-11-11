@@ -37,7 +37,7 @@
                     <div class="handleDialog" v-if="ishow && index==current">
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
                     </div>
-                    <img :src="item.img" style="height: 100%;width: 100%">
+                    <img :src=item.img style="height: 100%;width: 100%">
                   <!--
                     //商品彩带
                       <div class="wrap">】

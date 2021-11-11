@@ -7,12 +7,30 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login',
+      redirect: '/backWelcome',
     },
     {
       path: '/backHome',
       component: () => import(/* webpackChunkName: "dashboard" */ '../components/back/Home'),
-      meta: { title: '后台首页' }
+      meta: { title: '后台首页' },
+      redirect: '/backWelcome',
+      children: [
+        {
+          path: '/backWelcome',
+          component: () => import('../components/back/welcome/Welcome'),
+          meta: { title: '欢迎光临' }
+        },
+        {
+          path: '/backGoods',
+          component: () => import('../components/back/goods/goodsList'),
+          meta: { title: '商品列表' }
+        },
+        {
+          path: '/backInformation',
+          component: () => import('../components/back/goods/goodsInformation'),
+          meta: { title: '商品详情' }
+        }
+      ]
     },
     {
       path: '/',
