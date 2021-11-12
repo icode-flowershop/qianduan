@@ -1,14 +1,12 @@
 <template>
   <div id="app" style="background: #DCDFE6">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-import Home from "./components/back/Home";
 export default {
   name: 'App',
-  components: {Home}
 }
 </script>
 

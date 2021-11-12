@@ -4,111 +4,72 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      redirect: '/backWelcome',
-    },
-    {
+    routes: [
+        {
+            path: '/',
+            component: () => import( '../components/login.vue'),
+        },
+
+        {
+            path: '/mallHome',
+            component: () => import( '../components/front/layouts/Home.vue'),
+            children: [
+              {
+                path:'/',
+                component: () => import( '../components/front/page/index.vue'),
+              },
+                {
+                    path: '/goodsDesc',
+                    component: () => import( '../components/front/page/goodsDesc.vue'),
+                },
+                {
+                    path: '/carts',
+                    component: () => import( '../components/front/page/carts.vue'),
+                },
+                {
+                    path: '/myOrders',
+                    component: () => import( '../components/front/page/myOrders.vue'),
+                },
+                {
+                    path: '/makeSureOrder',
+                    component: () => import( '../components/front/page/makeSureOrder.vue'),
+                },
+                {
+                    path: '/submitOrder',
+                    component: () => import('../components/front/page/submitOrder.vue'),
+                },
+                {
+                    path: '/userInfo',
+                    component: () => import( '../components/front/page/userInfo.vue'),
+                },
+                {
+                    path: '/addressMag',
+                    component: () => import('../components/front/page/addressMag.vue'),
+                },
+
+            ],
+        },
+      {
       path: '/backHome',
-      component: () => import(/* webpackChunkName: "dashboard" */ '../components/back/Home'),
+      component: () => import('../components/back/Home'),
       meta: { title: '后台首页' },
       redirect: '/backWelcome',
       children: [
-        {
-          path: '/backWelcome',
-          component: () => import('../components/back/welcome/Welcome'),
-          meta: { title: '欢迎光临' }
-        },
-        {
-          path: '/backGoods',
-          component: () => import('../components/back/goods/goodsList'),
-          meta: { title: '商品列表' }
-        },
-        {
-          path: '/backInformation',
-          component: () => import('../components/back/goods/goodsInformation'),
-          meta: { title: '商品详情' }
-        }
-      ]
-    },
-    {
-      path: '/',
-      component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
-      meta: { title: 'helloFront' },
-      children: [
-        {
-          path: '/helloHome',
-          component: () => import('../components/page/index.vue'),
-          meta: { title: '首页' }
-        },
-        {
-          path: '/goodsDesc',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/goodsDesc.vue'),
-          meta: { title: '商品详情' }
-        },
-        {
-          path: '/carts',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/carts.vue'),
-          meta: { title: '购物车' }
-        },
-
-        {
-          path: '/myOrders',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/myOrders.vue'),
-          meta: { title: '我的订单' }
-        },
-        {
-          path: '/makeSureOrder',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/makeSureOrder.vue'),
-          meta: { title: '确认订单' }
-        },
-        {
-          path: '/submitOrder',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/submitOrder.vue'),
-          meta: { title: '提交订单' }
-        },
-        {
-          path: '/userInfo',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/userInfo.vue'),
-          meta: { title: '个人信息' }
-        },
-        {
-          path: '/addressMag',
-          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/addressMag.vue'),
-          meta: { title: '地址管理' }
-        },
-        {
-          path: '/404',
-          component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
-          meta: { title: '404' }
-        },
-        {
-          path: '/403',
-          component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
-          meta: { title: '403' }
-        }
-
-      ]
-    },
-    {
-      path: '/login',
-      component: () => import(/* webpackChunkName: "login" */ '../components/page/login.vue'),
-      meta: { title: '登录' }
-    },
-    {
-      path: '/register',
-      component: () => import(/* webpackChunkName: "login" */ '../components/page/register.vue'),
-      meta: { title: '注册' }
-    },
-    // {
-    //   path: '/register',
-    //   component: () => import(/* webpackChunkName: "login" */ '../components/page/Register.vue'),
-    //   meta: { title: '注册' }
-    // },
-    {
-      path: '*',
-      redirect: '/404'
-    }
-  ]
+          {
+              path: '/backWelcome',
+              component: () => import('../components/back/welcome/Welcome'),
+              meta: { title: '欢迎光临' },
+          },
+          {
+              path: '/backGoods',
+              component: () => import('../components/back/goods/goodsList'),
+              meta: { title: '商品列表' },
+          },
+          {
+              path: '/backInformation',
+              component: () => import('../components/back/goods/goodsInformation'),
+              meta: { title: '商品详情' },
+          },
+      ],
+  },]
 })

@@ -1,17 +1,16 @@
 <template>
   <div class="header">
     <!-- 前往主页按钮 -->
-    <router-link to="/" style="color: #F2F8FE">
+    <router-link to="/mallHome" style="color: #F2F8FE">
 
       <div class="logo" style="position: absolute;">
         <div class="collapse-btn">
           <i class="el-icon-s-home"></i>
         </div>
 
-        <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../assets/img/logo.png">
+        <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../../assets/img/logo.png">
 
            <i class="el-icon-back" @click="goBackPath" id="back"></i>
-         <!--   <i class="el-icon-right" @click="goNextPath" id="next"></i> -->
 
       </div>
 
@@ -32,7 +31,7 @@
 
         <!-- 用户头像 -->
         <div class="user-avator">
-          <img src="../../assets/img/userIMG.png" />
+          <img src="../../../assets/img/userIMG.png" />
         </div>
 
         <!-- 用户名下拉菜单 -->
@@ -89,13 +88,6 @@
         this.$router.push('/');
       }
     },
-    /* goNextPath(){
-      if(window.history.length>1){
-        this.$router.go();
-      }else{
-        this.$router.push('/');
-      }
-    } */
     },
     mounted() {
       if (document.body.clientWidth < 1500) {

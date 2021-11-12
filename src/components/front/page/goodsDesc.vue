@@ -2,7 +2,7 @@
     <div>
         <div class="goodsBox">
             <div class="goods-img">
-                <img :src="goodsInfo.img" alt="" />
+                <img :src=goodsInfo.img alt="" />
             </div>
 
             <div class="goods-info">
@@ -64,6 +64,7 @@
                     size="medium"
                     type="danger"
                     @click="add1"
+
                     >加入购物车</el-button
                 >
                 <p style="color: #777777">{{ tips }}</p>
@@ -134,9 +135,15 @@ export default {
             this.ishow = false;
             this.current = null;
         },
+
         //添加购物车
         add1() {
             if (this.add1_can_press) {
+              //添加全局事件总线
+              this.$bus.$emit('a',this.goodsInfo);
+
+              // console.log(this.goodsInfo);
+
                 this.$notify({
                     title: "添加购物车",
                     message: "商品已添加到你的购物车",
@@ -156,6 +163,7 @@ export default {
                     this.err_can_press = true;
                 }, 1000);
             }
+            this.$refs.carts.addcart();
         },
     },
 };

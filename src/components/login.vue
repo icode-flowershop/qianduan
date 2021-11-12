@@ -31,12 +31,13 @@
                     v-model="checkIdentity"
                 /><span>管理员登录</span>
 
-                <input
+                <!-- <input
                     type="submit"
                     value="登 录"
                     class="btn1"
-                    @click="login"
-                />
+                    @click.stop="login()"
+                /> -->
+                <button class="btn1" @click="login">登 录</button>
             </form>
         </div>
         <div class="container2">
@@ -79,7 +80,8 @@
     </div>
 </template>
 
-<script>
+<script>import router from "../router";
+
 export default {
     data() {
         return {
@@ -98,23 +100,27 @@ export default {
 
     methods: {
         login() {
+
+
             if (this.checkIdentity) {
                 this.role = 1;
             }
 
-            this.axios
+
+              this.axios
                 .get(
                     `/api/beloving/login?username=${this.username}&password=${this.pwd}&role=${this.role}`
                 )
                 .then((resp) => {
+                    console.log(resp);
                     if (resp.data) {
+                        console.log("进入");
                         this.$message.success("登录成功");
-
                         if (this.checkIdentity) {
                             //push到后台路由
-                            this.$router.push("/backHome")
+                            this.$router.push("/backHome");
                         } else {
-                            this.$router.push("/helloHome");
+                            this.$router.push("/mallHome");
                         }
                     } else {
                         this.$message.warning("账号密码错误,登录失败");
@@ -122,7 +128,14 @@ export default {
                 })
                 .catch((err) => {
                     this.message.warning(err.message);
+                })
+                .finally((_) => {
+                    console.log("123");
                 });
+            console.log("133");
+
+
+
         },
         forgetPwd() {
             this.$message.warning("请联系管理员 QQ:1035821043");

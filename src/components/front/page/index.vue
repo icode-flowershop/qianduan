@@ -4,7 +4,7 @@
 
     <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
       <el-carousel-item v-for="item in imageList" :key="item.id">
-        <img src="../../assets/img/001.jpeg">
+        <img src="../../../assets/img/001.jpeg">
       </el-carousel-item>
     </el-carousel>
     <br>
@@ -37,7 +37,7 @@
                     <div class="handleDialog" v-if="ishow && index==current">
                       <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
                     </div>
-                    <img :src=item.img style="height: 100%;width: 100%">
+                    <img :src="item.img" style="height: 100%;width: 100%">
                   <!--
                     //商品彩带
                       <div class="wrap">】
@@ -79,10 +79,10 @@
           selectd: '',
           currentDate: new Date(),
           imageList:[
-            {id:1,title:"test1", address:"../../assets/img/01.jpeg"},
-            {id:2,title:"test1", address:"../../assets/img/01.jpeg"},
-            {id:3,title:"test1", address:"../../assets/img/01.jpeg"},
-            {id:4,title:"test1", address:"../../assets/img/01.jpeg"},
+            {id:1,title:"test1", address:""},
+            {id:2,title:"test1", address:""},
+            {id:3,title:"test1", address:""},
+            {id:4,title:"test1", address:""},
           ],
           goodsList:[
 
