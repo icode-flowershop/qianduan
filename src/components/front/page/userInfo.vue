@@ -45,7 +45,7 @@
             name:'admin',
             tel:'17654255635',
             email:'zengxiaochao666@163.com',
-            img:'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2057588226,2402156864&fm=11&gp=0.jpg'
+            img:'',
 
           }
         }

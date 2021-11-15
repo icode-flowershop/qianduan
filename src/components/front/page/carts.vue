@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div>
         <!--头部-->
         <div style="width: 80%; margin-left: 20%"></div>
         <!--表头-->
@@ -7,15 +7,14 @@
             <h3>购物车</h3>
             <el-table
                 :data="
-                    tableData.filter(
+                    goodsInfos.filter(
                         (data) =>
                             !search ||
                             data.name
                                 .toLowerCase()
                                 .includes(search.toLowerCase())
                     )
-                "
-                @selection-change="handleSelectionChange"
+               " @selection-change="handleSelectionChange"
                 style="width: 100%"
             >
                 <!--        多选框-->
@@ -41,19 +40,16 @@
                 <!--        商品名字-->
                 <el-table-column
                     label="商品名"
-                    prop="name"
+                    prop="fname"
                     align="center"
                 ></el-table-column>
-                <!--        上下架状态-->
+                <!--        花语-->
                 <el-table-column
-                    label="状态"
-                    prop="num"
+                    label="花语"
+                    prop="says"
                     width="110px"
                     align="center"
                 >
-                    <template slot-scope="scope">
-                        {{ scope.row.says }}
-                    </template>
                 </el-table-column>
                 <!--        商品单价-->
                 <el-table-column
@@ -69,14 +65,15 @@
                 <!--        商品数量-->
                 <el-table-column
                     label="数量"
-                    prop="num"
+                    prop="inventory"
                     width="140px"
                     align="center"
                 >
                     <template slot-scope="scope">
                         <el-input-number
-                            size="mini"
-                            v-model="scope.row.nums"
+                            :min="1"
+                            :max='scope.row.inventory'
+                            v-model="scope.row.selling_num"
                         ></el-input-number>
                     </template>
                 </el-table-column>
@@ -91,14 +88,14 @@
                         <span>&yen;</span
                         >{{
                             parseFloat(
-                                scope.row.price * scope.row.nums
+                                scope.row.price * scope.row.selling_num
                             ).toFixed(2)
                         }}
                     </template>
                 </el-table-column>
                 <!--        操作-->
                 <el-table-column align="right">
-                    <template slot="header" slot-scope="">
+                    <template slot="header" >
                         <el-input
                             v-model="search"
                             size="mini"
@@ -106,11 +103,10 @@
                         />
                     </template>
                     <template slot-scope="scope">
-                        <el-button size="mini" type="danger"
+                        <el-button size="mini" type="danger" @click="removeCart(scope.$index)"
                             >移出购物车</el-button
                         >
                         <el-button size="mini" type="success">结算</el-button>
-                        {{ scope.row.name }}
                     </template>
                 </el-table-column>
             </el-table>
@@ -119,26 +115,24 @@
             <!--描述：商品结算开始-->
             <div class="balance">
                 <ul class="balance_ul1">
-                    <el-button type="danger" size="medium" class="button1" plain
+                    <el-button type="danger" size="medium" class="button1" plain  @click="removeCheckedCart"
                         >删除选中商品</el-button
                     >
-                    <el-button type="danger" size="medium" class="button1" plain
-                        >清除下架商品</el-button
-                    >
+
                     <el-button
                         type="success"
                         size="medium"
                         class="button1"
                         plain
-                        @click="show"
+
                         >结算选中商品</el-button
                     >
                     <span class="balance_ul2">
-                        <span>共<span class="spanText"></span>件商品</span>
+                        <span>共<span class="spanText" ></span>件商品</span>
                         <span>总价<span class="spanText">&yen;</span></span>
                         <span>
                             <router-link to="/makeSureOrder">
-                                <el-button>全部结算</el-button>
+                                <el-button @click="submitOrder">全部结算</el-button>
                             </router-link>
                         </span>
                     </span>
@@ -153,20 +147,6 @@ export default {
     name: "carts",
     data() {
         return {
-            tableData: [
-                {
-                    name: "华为P40 Pro",
-                    price: 5988.0,
-                    img: "",
-                    nums: 1,
-                },
-                {
-                    name: "iPhone 11 Pro Max",
-                    price: 6338.9,
-                    img: "https://img12.360buyimg.com/n1/jfs/t1/68636/31/9824/169738/5d780ed7E97e88252/7b62380330636738.jpg",
-                    nums: 2,
-                },
-            ],
             goodsInfos: [],
             search: "",
             //选中列表
@@ -174,27 +154,40 @@ export default {
             chooseList: [],
         };
     },
-    mounted() {
-      
+    mounted(){
+
+      this.goodsInfos= this.$store.state.goodsCart;
+   console.log(this.$store.state.goodsCart)
     },
-    beforeDestroy() {
-        this.$bus.$off("a");
-    },
+
     methods: {
-        addcart() {
-            this.$bus.$on("a", (data) => {
-                console.log(data);
-                this.goodsInfos.push(data);
-            });
-        },
         // 多选操作
         handleSelectionChange(val) {
+          console.log(val)
+
             this.multipleSelection = val;
+
         },
-        show() {
-            alert();
-            console.log(this.goodsInfos);
+        submitOrder(){
+          let obj = [...this.multipleSelection]
+          for (const item of obj) {
+             this.$store.state.goodsOrder.push(item)
+          }
+
         },
+        removeCart(index){
+          console.log(index)
+          this.$store.state.goodsCart.splice(index,1)
+        },
+        removeCheckedCart(){
+          let map = new Map(this.$store.state.goodsCart,this.multipleSelection);
+
+console.log(Array.from([...map]))
+          return Array.from([...map]);
+
+
+        }
+
     },
 };
 </script>

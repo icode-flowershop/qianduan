@@ -2,7 +2,7 @@
     <div>
         <div class="goodsBox">
             <div class="goods-img">
-                <img :src=goodsInfo.img alt="" />
+                <img :src="goodsInfo.img" alt="" />
             </div>
 
             <div class="goods-info">
@@ -34,7 +34,10 @@
 
                 <div class="info-price">
                     <div class="info-price-top">
-                        <span>店铺价:</span><span>￥{{ goodsInfo.price }}</span>
+                        <span>店铺价:</span
+                        ><span style="color: red; font-size: large"
+                            >￥{{ goodsInfo.price }}</span
+                        >
                     </div>
                     <div class="info-price-bottom">
                         <span>市场价:</span
@@ -53,18 +56,19 @@
                 <span>数量：</span>
                 <el-input-number
                     size="large"
-                    v-model="num"
+                    v-model="selling_num"
                     :min="1"
                     :max="goodsInfo.inventory"
                     @change="handleChange"
+
                     label="商品数量"
                 ></el-input-number>
+                <button  @click="show">123</button>
                 <el-button
                     id="addCart"
                     size="medium"
                     type="danger"
                     @click="add1"
-
                     >加入购物车</el-button
                 >
                 <p style="color: #777777">{{ tips }}</p>
@@ -91,16 +95,12 @@ export default {
                 packaging: "",
                 inventory: 0,
             },
-            num: 1,
+            selling_num: 1,
             tips: "温馨提示·不支持7天无理由退货",
 
             //隐形窗口
             ishow: false,
             current: 0,
-
-            //按钮点击限制
-            add1_can_press: true,
-            err_can_press: true,
 
             //商品详情
         };
@@ -135,35 +135,40 @@ export default {
             this.ishow = false;
             this.current = null;
         },
-
+show(){
+  console.log(this.selling_num)
+},
         //添加购物车
         add1() {
-            if (this.add1_can_press) {
-              //添加全局事件总线
-              this.$bus.$emit('a',this.goodsInfo);
+                //添加全局事件总线
 
-              // console.log(this.goodsInfo);
+                //判断商品是否已经存在购物车中
+                let flag = false;
+                for (const item of this.$store.state.goodsCart) {
+                    if(item == this.goodsInfo){
+                      flag = true;
+                      this.$message.warning("商品已经在购物车中")
+                       this.$notify.error({
+                    title: "错误",
+                    message: "请求过于频繁，2秒后重试",
+                });
+                    }
+                }
+                if(!flag){
+                  this.goodsInfo.selling_num = this.selling_num;
+                  console.log(this.goodsInfo)
 
+                   this.$store.state.goodsCart.push(this.goodsInfo);
+                   console.log(this.$store.state.goodsCart)
+                localStorage.setItem("goodsCart", this.$store.state.goodsCart);
                 this.$notify({
                     title: "添加购物车",
                     message: "商品已添加到你的购物车",
                     type: "success",
                 });
-                this.add1_can_press = false;
-                setTimeout(() => {
-                    this.add1_can_press = true;
-                }, 2000);
-            } else {
-                this.$notify.error({
-                    title: "错误",
-                    message: "请求过于频繁，2秒后重试",
-                });
-                this.err_can_press = false;
-                setTimeout(() => {
-                    this.err_can_press = true;
-                }, 1000);
-            }
-            this.$refs.carts.addcart();
+
+                this.selling_num = 1;
+                }
         },
     },
 };

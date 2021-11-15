@@ -31,13 +31,12 @@
                     v-model="checkIdentity"
                 /><span>管理员登录</span>
 
-                <!-- <input
+                <input
                     type="submit"
                     value="登 录"
                     class="btn1"
-                    @click.stop="login()"
-                /> -->
-                <button class="btn1" @click="login">登 录</button>
+                    @click.prevent="login()"
+                />
             </form>
         </div>
         <div class="container2">
@@ -80,13 +79,13 @@
     </div>
 </template>
 
-<script>import router from "../router";
-
+<script>
+import axios from "axios";
 export default {
     data() {
         return {
-            username: "",
-            pwd: "",
+            username: 123,
+            pwd: 123,
             role: 0,
             checkIdentity: false,
             user: {
@@ -100,21 +99,17 @@ export default {
 
     methods: {
         login() {
-
-
             if (this.checkIdentity) {
                 this.role = 1;
             }
 
-
-              this.axios
+            axios
                 .get(
                     `/api/beloving/login?username=${this.username}&password=${this.pwd}&role=${this.role}`
                 )
                 .then((resp) => {
                     console.log(resp);
                     if (resp.data) {
-                        console.log("进入");
                         this.$message.success("登录成功");
                         if (this.checkIdentity) {
                             //push到后台路由
@@ -128,15 +123,9 @@ export default {
                 })
                 .catch((err) => {
                     this.message.warning(err.message);
-                })
-                .finally((_) => {
-                    console.log("123");
                 });
-            console.log("133");
-
-
-
         },
+
         forgetPwd() {
             this.$message.warning("请联系管理员 QQ:1035821043");
         },
@@ -178,9 +167,9 @@ export default {
             }
         },
     },
+    mounted() {},
 };
 </script>
-
 <style>
 #all {
     height: 100%;

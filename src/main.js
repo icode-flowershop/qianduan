@@ -9,6 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/theme-green/index.css'; // 浅绿色主题
 import './assets/css/icon.css';
 import http from './utils/http.js';
+import store from './store/store.js'
 
 
 Vue.config.productionTip = false
@@ -26,8 +27,9 @@ Vue.use(ElementUI, {
 new Vue({
   el: '#app',
   router,
+  store,
   render:h=>h(App),
   beforeCreate() {
-		Vue.prototype.$bus = this; //安装全局事件总线
+		Vue.prototype.$bus = new Vue(); //安装全局事件总线
 	},
 })

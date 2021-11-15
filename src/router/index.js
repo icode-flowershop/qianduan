@@ -9,7 +9,6 @@ export default new Router({
             path: '/',
             component: () => import( '../components/login.vue'),
         },
-
         {
             path: '/mallHome',
             component: () => import( '../components/front/layouts/Home.vue'),
@@ -41,10 +40,6 @@ export default new Router({
                 {
                     path: '/userInfo',
                     component: () => import( '../components/front/page/userInfo.vue'),
-                },
-                {
-                    path: '/addressMag',
-                    component: () => import('../components/front/page/addressMag.vue'),
                 },
 
             ],

@@ -4,8 +4,9 @@
 <!--    地址-->
     <div style="width: 90%;margin-left: 10%;">
         <div style="width: 23%;float: left;margin-left: 20px;margin-bottom: 10px;"
-             v-for="(item, index) in userAddress"
+        v-for="(item, index) in userAddress"
              @click="setFirst(index)">
+
 <!--          地址卡片-->
           <el-card class="box-card" :style="item.isFirst==1?'background: #F2F8FE':'background: #606266'">
             <div slot="header" class="clearfix">
@@ -38,36 +39,84 @@
     <div class="title" style="width: 80%;margin-left: 10%;">
       <h3>确认订单</h3>
       <el-table
-        ref="multipleTable"
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-        style="width: 100%;">
-        <!--        商品图片-->
-        <el-table-column label="商品" prop="img" width="110px" align="center">
-          <template slot-scope="scope">
-            <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
-          </template>
-        </el-table-column>
-        <!--        商品名字-->
-        <el-table-column label="商品名" prop="name" align="center"></el-table-column>
-        <!--        商品单价-->
-        <el-table-column label="单价"  prop="prize" width="110px" align="center">
-          <template slot-scope="scope">
-            <span>&yen;</span>{{scope.row.price}}
-          </template>
-        </el-table-column>
-        <!--        商品数量-->
-        <el-table-column label="数量"  prop="num" width="140px" align="center">
-          <template slot-scope="scope">
-            <span>{{scope.row.nums}}</span>
-          </template>
-        </el-table-column>
-        <!--        商品小计-->
-        <el-table-column label="小计"  prop="allPrize" width="110px" align="center">
-          <template slot-scope="scope">
-            <span>&yen;</span>{{parseFloat(scope.row.price*scope.row.nums).toFixed(2)}}
-          </template>
-        </el-table-column>
-      </el-table>
+                :data='orderInfo'
+                style="width: 100%"
+            >
+
+                <!--        商品图片-->
+                <el-table-column
+                    label="商品"
+                    prop="img"
+                    width="110px"
+                    align="center"
+
+                >
+                    <template slot-scope="scope">
+                        <el-image
+                            style="width: 100px; height: 100px"
+                            :src="scope.row.img"
+                        />
+                    </template>
+                </el-table-column>
+                <!--        商品名字-->
+                <el-table-column
+                    label="商品名"
+                    prop="fname"
+                    align="center"
+                ></el-table-column>
+                <!--        花语-->
+                <el-table-column
+                    label="花语"
+                    prop="says"
+                    width="110px"
+                    align="center"
+                >
+                </el-table-column>
+                <!--        商品单价-->
+                <el-table-column
+                    label="单价"
+                    prop="price"
+                    width="110px"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span>&yen;</span>{{ scope.row.price }}
+                    </template>
+                </el-table-column>
+                <!--        商品数量-->
+                <el-table-column
+                    label="数量"
+                    prop="inventory"
+                    width="140px"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <el-input-number
+                            :min="1"
+                            :max='scope.row.inventory'
+                            v-model="scope.row.nums"
+                        >1</el-input-number>
+                    </template>
+                </el-table-column>
+                <!--        商品小计-->
+                <el-table-column
+                    label="小计"
+                    prop="allPrize"
+                    width="110px"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <span>&yen;</span
+                        >{{
+                            parseFloat(
+                                scope.row.price * scope.row.nums
+                            ).toFixed(2)
+                        }}
+                    </template>
+                </el-table-column>
+
+
+            </el-table>
     </div>
     <div style="width: 80%;margin-left: 10%;">
 
@@ -96,11 +145,14 @@
     data()
     {
       return{
+
+        orderInfo:[],
+
         tableData: [{
           name: '华为P40 Pro',
           price:5988.00,
           status:"2",
-          img:"http://05imgmini.eastday.com/mobile/20200507/20200507135939_9e1683aae3ee6fe14f853d422cdc32be_2.jpeg",
+          img:"",
           nums:1
         }, {
           name: 'iPhone 11 Pro Max',
@@ -130,14 +182,15 @@
           }
         ],
         search : '',
-        //选中列表
-        multipleSelection : [],
       }
     },
-    created() {
-    },
+   mounted(){
+     console.log(this.$store.state.goodsOrder);
+      this.orderInfo=this.$store.state.goodsOrder;
+      console.log(this.orderInfo);
+   },
     methods:{
-      setFirst(index)
+    setFirst(index)
       {
         const length = this.userAddress.length;
         for (let i = 0; i < length; i++) {
