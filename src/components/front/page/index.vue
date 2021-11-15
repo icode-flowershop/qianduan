@@ -104,7 +104,7 @@
         },
 
         getAllGoods(){
-          this.axios.get('/api/beloving/home')
+          this.axios.get('/api/beloving/showFlower')
           .then((resp)=>{
             console.log(resp)
             this.goodsList = resp.data;

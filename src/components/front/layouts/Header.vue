@@ -43,7 +43,9 @@
           <el-dropdown-menu slot="dropdown">
             <router-link to="/myOrders"><el-dropdown-item>我的订单</el-dropdown-item> </router-link>
             <router-link to="/userInfo"><el-dropdown-item>我的信息</el-dropdown-item> </router-link>
-            <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+            <router-link to="/">  <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+            </router-link>
+
           </el-dropdown-menu>
         </el-dropdown>
       </div>

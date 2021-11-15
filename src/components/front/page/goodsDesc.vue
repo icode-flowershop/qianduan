@@ -1,4 +1,4 @@
-<template >
+<template>
     <div>
         <div class="goodsBox">
             <div class="goods-img">
@@ -34,21 +34,13 @@
 
                 <div class="info-price">
                     <div class="info-price-top">
-                        <span>店铺价:</span
-                        ><span style="color: red; font-size: large"
-                            >￥{{ goodsInfo.price }}</span
-                        >
+                        <span>店铺价:</span><span style="color: red; font-size: large">￥{{ goodsInfo.price }}</span>
                     </div>
                     <div class="info-price-bottom">
-                        <span>市场价:</span
-                        ><span style="text-decoration: line-through"
-                            >￥{{ goodsInfo.price + 100 }}</span
-                        >
+                        <span>市场价:</span><span style="text-decoration: line-through">￥{{ goodsInfo.price + 100 }}</span>
                         <p>
                             销量
-                            <span style="font-size: 25px; color: red">{{
-                                goodsInfo.sold
-                            }}</span
+                            <span style="font-size: 25px; color: red">{{ goodsInfo.sold }}</span
                             >笔
                         </p>
                     </div>
@@ -60,17 +52,9 @@
                     :min="1"
                     :max="goodsInfo.inventory"
                     @change="handleChange"
-
                     label="商品数量"
                 ></el-input-number>
-                <button  @click="show">123</button>
-                <el-button
-                    id="addCart"
-                    size="medium"
-                    type="danger"
-                    @click="add1"
-                    >加入购物车</el-button
-                >
+                <el-button id="addCart" size="medium" type="danger" @click="add1">加入购物车</el-button>
                 <p style="color: #777777">{{ tips }}</p>
             </div>
         </div>
@@ -78,174 +62,169 @@
 </template>
 
 <script>
-export default {
-    name: "goodsDesc",
-    data() {
-        return {
-            goodsId: "0",
-            goodsInfo: {
-                /* 需要展示商品信息 */
-                id: 0,
-                img: "",
-                fname: "",
-                price: "",
-                sold: "",
-                says: "",
-                material: "",
-                packaging: "",
-                inventory: 0,
+    export default {
+        name: 'goodsDesc',
+        data() {
+            return {
+                goodsId: '0',
+                goodsInfo: {
+                    /* 需要展示商品信息 */
+                    id: 0,
+                    img: '',
+                    fname: '',
+                    price: '',
+                    sold: '',
+                    says: '',
+                    material: '',
+                    packaging: '',
+                    inventory: 0,
+                },
+                selling_num: 1,
+                tips: '温馨提示·不支持7天无理由退货',
+
+                //隐形窗口
+                ishow: false,
+                current: 0,
+
+                //商品详情
+            }
+        },
+        created() {
+            if (this.$route.query.goodId == null) {
+                this.$router.push('/helloHome')
+            }
+            this.goodsId = this.$route.query.goodId
+            this.getdate()
+        },
+        methods: {
+            //数据更新
+            getdate() {
+                this.axios.get('/api/beloving/flowerDetail?id=' + this.goodsId).then(resp => {
+                    this.goodsInfo = resp.data
+                })
             },
-            selling_num: 1,
-            tips: "温馨提示·不支持7天无理由退货",
 
-            //隐形窗口
-            ishow: false,
-            current: 0,
-
-            //商品详情
-        };
-    },
-    created() {
-        if (this.$route.query.goodId == null) {
-            this.$router.push("/helloHome");
-        }
-        this.goodsId = this.$route.query.goodId;
-        this.getdate();
-    },
-    methods: {
-        //数据更新
-        getdate() {
-            this.axios
-                .get("/api/beloving/flowerDetail?id=" + this.goodsId)
-                .then((resp) => {
-                    this.goodsInfo = resp.data;
-                });
-        },
-
-        handleChange(value) {
-            this.money = value * this.prize;
-        },
-        //显示操作项
-        showDialog(index, item) {
-            this.ishow = true;
-            this.current = index;
-        },
-        //隐藏蒙层
-        hideDialog(index, item) {
-            this.ishow = false;
-            this.current = null;
-        },
-show(){
-  console.log(this.selling_num)
-},
-        //添加购物车
-        add1() {
+            handleChange(value) {
+                this.money = value * this.prize
+            },
+            //显示操作项
+            showDialog(index, item) {
+                this.ishow = true
+                this.current = index
+            },
+            //隐藏蒙层
+            hideDialog(index, item) {
+                this.ishow = false
+                this.current = null
+            },
+            //添加购物车
+            add1() {
                 //添加全局事件总线
 
                 //判断商品是否已经存在购物车中
-                let flag = false;
+                let flag = false
                 for (const item of this.$store.state.goodsCart) {
-                    if(item == this.goodsInfo){
-                      flag = true;
-                      this.$message.warning("商品已经在购物车中")
-                       this.$notify.error({
-                    title: "错误",
-                    message: "请求过于频繁，2秒后重试",
-                });
+                    if (item == this.goodsInfo) {
+                        flag = true
+                        this.$message.warning('商品已经在购物车中')
+                        this.$notify.error({
+                            title: '错误',
+                            message: '请求过于频繁，2秒后重试',
+                        })
                     }
                 }
-                if(!flag){
-                  this.goodsInfo.selling_num = this.selling_num;
-                  console.log(this.goodsInfo)
+                if (!flag) {
+                    this.goodsInfo.selling_num = this.selling_num
+                    console.log(this.goodsInfo)
 
-                   this.$store.state.goodsCart.push(this.goodsInfo);
-                   console.log(this.$store.state.goodsCart)
-                localStorage.setItem("goodsCart", this.$store.state.goodsCart);
-                this.$notify({
-                    title: "添加购物车",
-                    message: "商品已添加到你的购物车",
-                    type: "success",
-                });
+                    this.$store.state.goodsCart.push(this.goodsInfo)
 
-                this.selling_num = 1;
+                    this.$store.state.setLocalStorage('goodsCart')
+
+                    this.$notify({
+                        title: '添加购物车',
+                        message: '商品已添加到你的购物车',
+                        type: 'success',
+                    })
+                    this.selling_num = 1
                 }
+            },
         },
-    },
-};
+    }
 </script>
 
 <style scoped>
-.goodsBox {
-    width: 100%;
-    margin: 50px auto;
-    background-color: rgb(245, 245, 245);
-}
+    .goodsBox {
+        width: 100%;
+        margin: 50px auto;
+        background-color: rgb(245, 245, 245);
+    }
 
-.info-title {
-    font-weight: 600;
-    font-size: 20px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #ccc;
-}
-.fr {
-    margin: 0;
-    padding: 0;
-}
-.fl {
-    float: left;
-    margin: 0;
-    padding: 0;
-    margin-right: 20px;
-}
-.goods-img {
-    float: left;
-    box-sizing: content-box;
-    margin: 0 50px;
-}
-.goods-img > img {
-    width: 360px;
-    height: 500px;
-}
-.info-msg {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #666;
-}
-.clearfix {
-    clear: both;
-    content: "";
-    overflow: hidden;
-}
+    .info-title {
+        font-weight: 600;
+        font-size: 20px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #ccc;
+    }
+    .fr {
+        margin: 0;
+        padding: 0;
+    }
+    .fl {
+        float: left;
+        margin: 0;
+        padding: 0;
+        margin-right: 20px;
+    }
+    .goods-img {
+        float: left;
+        box-sizing: content-box;
+        margin: 0 50px;
+    }
+    .goods-img > img {
+        width: 360px;
+        height: 500px;
+    }
+    .info-msg {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #666;
+    }
+    .clearfix {
+        clear: both;
+        content: '';
+        overflow: hidden;
+    }
 
-.goods-info {
-    float: left;
-    width: 670px;
-    height: 505px;
-    margin-bottom: 0;
-}
-.info-price {
-    height: 100px;
-    margin: 30px 0;
-    background-color: rgb(240, 240, 240);
-}
-.info-price span {
-    margin: 10px;
-    display: inline-block;
-}
-.info-price-bottom p {
-    float: right;
-}
-#addCart {
-    margin-left: 90px;
-}
+    .goods-info {
+        float: left;
+        width: 670px;
+        height: 505px;
+        margin-bottom: 0;
+    }
+    .info-price {
+        height: 100px;
+        margin: 30px 0;
+        background-color: rgb(240, 240, 240);
+    }
+    .info-price span {
+        margin: 10px;
+        display: inline-block;
+    }
+    .info-price-bottom p {
+        float: right;
+    }
+    #addCart {
+        margin-left: 90px;
+    }
 
-/**
+    /**
 隐藏页
 */
-.handleDialog {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.6);
-    width: 100%;
-    height: 100%;
-}
+    .handleDialog {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 100%;
+    }
 </style>

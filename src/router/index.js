@@ -66,5 +66,13 @@ export default new Router({
               meta: { title: '商品详情' },
           },
       ],
-  },]
+  },],
+  scrollBehavior(to, from, saveTop){
+    if (saveTop) {
+        return saveTop;
+    } else {
+        return {x: 0, y: 0}
+    }
+}
+
 })

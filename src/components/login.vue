@@ -6,10 +6,9 @@
                 <h4>BELOVING商城</h4>
                 <input
                     type="text"
-                    name="email"
                     placeholder="账号"
                     autocomplete="off"
-                    v-model="username"
+                    v-model="user.username"
                 />
                 <i class="typcn typcn-eye" id="eye"></i>
                 <input
@@ -18,7 +17,7 @@
                     placeholder="密码"
                     id="pwd"
                     autocomplete="off"
-                    v-model="pwd"
+                    v-model="user.password"
                 />
                 <a href="#" class="dnthave" id="register" @click="registerShow"
                     >注册</a
@@ -62,12 +61,7 @@
                     placeholder="手机号"
                     autocomplete="off"
                 />
-                <input
-                    type="text"
-                    id="_email"
-                    placeholder="邮箱"
-                    autocomplete="off"
-                />
+
                 <input
                     type="submit"
                     value="注册"
@@ -84,15 +78,14 @@ import axios from "axios";
 export default {
     data() {
         return {
-            username: 123,
-            pwd: 123,
             role: 0,
             checkIdentity: false,
             user: {
-                name: "",
+                username: "",
                 password: "",
                 phone: "",
-                email: "",
+                address: "",
+                id: "",
             },
         };
     },
@@ -105,7 +98,7 @@ export default {
 
             axios
                 .get(
-                    `/api/beloving/login?username=${this.username}&password=${this.pwd}&role=${this.role}`
+                    `/api/beloving/login?username=${this.user.username}&password=${this.user.password}&role=${this.role}`
                 )
                 .then((resp) => {
                     console.log(resp);
@@ -115,6 +108,9 @@ export default {
                             //push到后台路由
                             this.$router.push("/backHome");
                         } else {
+                            //将用户信息存储在$store中
+                            this.$store.userInfo = this.user;
+                            //this.$store.user.setLocalStorage("userInfo");
                             this.$router.push("/mallHome");
                         }
                     } else {
@@ -140,7 +136,7 @@ export default {
 
         /*  */
         verifyRegisterInfo(user) {
-            if (!user.name && !user.password && !user.phone && !user.email) {
+            if (!user.username && !user.password && !user.phone) {
                 return 1;
             } else {
                 this.$message.warning("注册信息不能为空");
@@ -148,16 +144,15 @@ export default {
             }
         },
         registerInfo() {
-            this.user.name = $("#_user").val();
+            this.user.username = $("#_user").val();
             this.user.password = $("#_password").val();
             this.user.phone = $("#_phone").val();
-            this.user.email = $("#_email").val();
 
             if (this.verifyRegisterInfo(this.user)) {
                 this.axios
                     .get(
-                        `/api/beloving/register?username=${this.user.name}&password=
-                ${this.user.password}&phone=${this.user.phone}&email=${this.user.email}&role=${this.role}`
+                        `/api/beloving/register?username=${this.user.username}&password=
+                ${this.user.password}&phone=${this.user.phone}&role=${this.role}`
                     )
                     .then((response) => {
                         console.log(response);
@@ -167,7 +162,6 @@ export default {
             }
         },
     },
-    mounted() {},
 };
 </script>
 <style>

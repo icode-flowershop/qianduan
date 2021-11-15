@@ -14,7 +14,8 @@
                                 .toLowerCase()
                                 .includes(search.toLowerCase())
                     )
-               " @selection-change="handleSelectionChange"
+                "
+                @selection-change="handleSelectionChange"
                 style="width: 100%"
             >
                 <!--        多选框-->
@@ -72,7 +73,7 @@
                     <template slot-scope="scope">
                         <el-input-number
                             :min="1"
-                            :max='scope.row.inventory'
+                            :max="scope.row.inventory"
                             v-model="scope.row.selling_num"
                         ></el-input-number>
                     </template>
@@ -95,7 +96,7 @@
                 </el-table-column>
                 <!--        操作-->
                 <el-table-column align="right">
-                    <template slot="header" >
+                    <template slot="header">
                         <el-input
                             v-model="search"
                             size="mini"
@@ -103,10 +104,13 @@
                         />
                     </template>
                     <template slot-scope="scope">
-                        <el-button size="mini" type="danger" @click="removeCart(scope.$index)"
+                        <el-button
+                            size="mini"
+                            type="danger"
+                            @click="removeCart(scope.$index)"
                             >移出购物车</el-button
                         >
-                        <el-button size="mini" type="success">结算</el-button>
+                        <el-button size="mini" type="success" >结算</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -115,24 +119,33 @@
             <!--描述：商品结算开始-->
             <div class="balance">
                 <ul class="balance_ul1">
-                    <el-button type="danger" size="medium" class="button1" plain  @click="removeCheckedCart"
-                        >删除选中商品</el-button
-                    >
-
                     <el-button
-                        type="success"
+                        type="danger"
                         size="medium"
                         class="button1"
                         plain
-
-                        >结算选中商品</el-button
+                        @click="removeCheckedCart"
+                        >删除选中商品</el-button
                     >
+                    <router-link to="/makeSureOrder">
+                        <el-button
+                            type="success"
+                            size="medium"
+                            class="button1"
+                            @click="Settlement"
+                            plain
+                            >结算选中商品</el-button
+                        >
+                    </router-link>
+
                     <span class="balance_ul2">
-                        <span>共<span class="spanText" ></span>件商品</span>
+                        <span>共<span class="spanText"></span>件商品</span>
                         <span>总价<span class="spanText">&yen;</span></span>
                         <span>
                             <router-link to="/makeSureOrder">
-                                <el-button @click="submitOrder">全部结算</el-button>
+                                <el-button @click="submitAllOrder"
+                                    >全部结算</el-button
+                                >
                             </router-link>
                         </span>
                     </span>
@@ -154,40 +167,47 @@ export default {
             chooseList: [],
         };
     },
-    mounted(){
 
-      this.goodsInfos= this.$store.state.goodsCart;
-   console.log(this.$store.state.goodsCart)
+    mounted() {
+        this.goodsInfos = this.$store.state.getLocalStorage("goodsCart");
     },
 
     methods: {
         // 多选操作
         handleSelectionChange(val) {
-          console.log(val)
+            console.log(val);
 
             this.multipleSelection = val;
-
         },
-        submitOrder(){
-          let obj = [...this.multipleSelection]
-          for (const item of obj) {
-             this.$store.state.goodsOrder.push(item)
-          }
-
+        submitAllOrder() {
+            let obj = this.goodsInfos;
+            for (const item of obj) {
+                this.$store.state.goodsOrder.push(item);
+            }
         },
-        removeCart(index){
-          console.log(index)
-          this.$store.state.goodsCart.splice(index,1)
+        Settlement() {
+            let obj = [...this.multipleSelection];
+            for (const item of obj) {
+                this.$store.state.goodsOrder.push(item);
+            }
         },
-        removeCheckedCart(){
-          let map = new Map(this.$store.state.goodsCart,this.multipleSelection);
+        //将商品移
+        removeCart(index) {
+            this.$store.state.goodsCart.splice(index, 1);
+            this.$store.state.setLocalStorage("goodsCart");
+            this.goodsInfos = this.$store.state.getLocalStorage("goodsCart");
+        },
 
-console.log(Array.from([...map]))
-          return Array.from([...map]);
-
-
-        }
-
+        //删除所有选中的商品
+        removeCheckedCart() {
+            this.goodsInfos = this.goodsInfos.filter((item) => {
+                for (const iterator of this.multipleSelection) {
+                    if (item == iterator) return false;
+                }
+            });
+            this.$store.state.goodsCart = this.goodsInfos;
+            this.$store.state.setLocalStorage("goodsCart");
+        },
     },
 };
 </script>
