@@ -6,14 +6,14 @@
           <img src="../../assets/img/manager.jpg" alt="" />
           <span>BELOVING电商后台管理系统</span>
         </div>
-        <el-button type="info" @click="logout">退出</el-button>
+        <el-button style= "background-color: #f05b72"type="info" @click="logout">退出</el-button>
     </el-header>
     <el-container>
-          <el-aside :width="isCollapse ? '61px' : '200px'">
+          <el-aside :width="isCollapse ? '61px' : '200px'" style="background-color: #65c294">
             <div class="toggle-button" @click="toggleCollpase">|||</div>
             <el-menu
               background-color="#333744"
-              text-color="#fff"
+              text-color="#f05b72"
               active-text-color="#409EFF"
               :unique-opened="true"
               :collapse="isCollapse"
@@ -42,7 +42,7 @@
               </el-submenu>
             </el-menu>
           </el-aside>
-      <el-main style="flex-grow:1;">
+      <el-main style="flex-grow:1; background-color: #feeeed">
         <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>
@@ -191,7 +191,6 @@ export default {
     saveActivePath(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
-      console.log('荆棘' + this.$route.path)
     }
   }
 }

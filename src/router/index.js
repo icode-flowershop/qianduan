@@ -7,7 +7,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: () => import( '../components/login.vue'),
+            component: () => import( '../components/back/Home'),
         },
         {
             path: '/mallHome',
@@ -66,13 +66,5 @@ export default new Router({
               meta: { title: '商品详情' },
           },
       ],
-  },],
-  scrollBehavior(to, from, saveTop){
-    if (saveTop) {
-        return saveTop;
-    } else {
-        return {x: 0, y: 0}
-    }
-}
-
+  },]
 })

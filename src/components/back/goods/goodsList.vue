@@ -1,7 +1,7 @@
 <template>
   <div class="all">
     <div v-for="item in goodsList" :key="item.id">
-      <div class="good" @click="information">
+      <div class="good" @click="information(item.id)">
         <img :src = item.img  alt=""/>
         <span>{{ item.fname }}</span>
       </div>
@@ -64,11 +64,23 @@ export default {
           "packaging": "姜黄色双面牛皮纸8张、白色雪梨纸1大张、浅粉色罗纹玫瑰金丝带2米",
           "inventory": 888,
           "deleted": 0
+        },
+        {
+          "id": 5,
+          "img": "https://img01.hua.com/uploadpic/newpic/202109161723490947.jpg",
+          "fname": "心中洛神",
+          "price": 389,
+          "sold": 99,
+          "says": "一眼足以定终身，我心佳人比洛神",
+          "material": "洛神玫瑰33枝",
+          "packaging": " 白色小号英文插画纸6张、白色雪梨纸2张、粉色罗纹烫金丝带2米",
+          "inventory": 234,
+          "deleted": 0
         }
       ]
     },
-    information() {
-      console.log()
+    information(e) {
+      this.$router.push({path:  '/backInformation', query: {id: e}})
     }
   }
 }
