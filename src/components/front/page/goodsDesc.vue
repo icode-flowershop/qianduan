@@ -54,7 +54,7 @@
                     @change="handleChange"
                     label="商品数量"
                 ></el-input-number>
-                <el-button id="addCart" size="medium" type="danger" @click="add1">加入购物车</el-button>
+                <el-button id="addCart" size="medium" type="danger" @click="addCart">加入购物车</el-button>
                 <p style="color: #777777">{{ tips }}</p>
             </div>
         </div>
@@ -79,6 +79,11 @@
                     packaging: '',
                     inventory: 0,
                 },
+                //获取用户名和ID
+                userInfo:{
+                  username: '',
+                  id: 0 ,
+                },
                 selling_num: 1,
                 tips: '温馨提示·不支持7天无理由退货',
 
@@ -93,15 +98,21 @@
             if (this.$route.query.goodId == null) {
                 this.$router.push('/helloHome')
             }
+            this.getUserInfo();
             this.goodsId = this.$route.query.goodId
-            this.getdate()
+            this.getdate();
+
         },
         methods: {
-            //数据更新
+            //商品数据更新
             getdate() {
                 this.axios.get('/api/beloving/flowerDetail?id=' + this.goodsId).then(resp => {
                     this.goodsInfo = resp.data
                 })
+            },
+            //获取用户信息
+            getUserInfo(){
+              this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
             },
 
             handleChange(value) {
@@ -117,38 +128,27 @@
                 this.ishow = false
                 this.current = null
             },
-            //添加购物车
-            add1() {
-                //添加全局事件总线
-
-                //判断商品是否已经存在购物车中
-                let flag = false
-                for (const item of this.$store.state.goodsCart) {
-                    if (item == this.goodsInfo) {
-                        flag = true
+            //添加进购物车
+            addCart() {
+                this.axios.get(`/api/beloving/cartInsert?userId=${this.userInfo.id}&flowerId=${this.goodsId}`).then(response => {
+                  console.log(response);
+                    if (!response) {
                         this.$message.warning('商品已经在购物车中')
                         this.$notify.error({
                             title: '错误',
                             message: '请求过于频繁，2秒后重试',
                         })
+                    } else {
+                        this.$notify({
+                            title: '添加购物车',
+                            message: '商品已添加到你的购物车',
+                            type: 'success',
+                        })
+                        this.selling_num = 1
                     }
-                }
-                if (!flag) {
-                    this.goodsInfo.selling_num = this.selling_num
-                    console.log(this.goodsInfo)
-
-                    this.$store.state.goodsCart.push(this.goodsInfo)
-
-                    this.$store.state.setLocalStorage('goodsCart')
-
-                    this.$notify({
-                        title: '添加购物车',
-                        message: '商品已添加到你的购物车',
-                        type: 'success',
-                    })
-                    this.selling_num = 1
-                }
+                })
             },
+
         },
     }
 </script>

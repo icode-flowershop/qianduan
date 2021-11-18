@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex)
 const state ={
   goodsCart:[],
@@ -12,8 +13,9 @@ const state ={
   }
 };
 const userInfo = {
-
+  //在登录界面获取用户名和用户id
 };
+
 const user = {
   setLocalStorage(str){
     localStorage.setItem(`${str}`, JSON.stringify(userInfo));
@@ -28,7 +30,23 @@ const user = {
 
 export default new Vuex.Store({
 	state,
-  userInfo,
-  user,
+  userInfo,//用来存储用户名和id
+  user,//对用户信息的操作
+   /* vuex数据持久化配置 */
+	plugins: [
+		createPersistedState({
+      // 存储方式：localStorage、sessionStorage、cookies
+			storage: localStorage,
+      // 存储的 key 的key值
+			key: "store",
+			render(userInfo) {
+        // 要存储的数据：本项目采用es6扩展运算符的方式存储了state中所有的数据
+        console.log(userInfo)
+				return {...userInfo};
+			}
+		})
+	]
+
+
 
 })

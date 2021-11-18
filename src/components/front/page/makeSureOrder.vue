@@ -60,11 +60,7 @@
                     align="center"
                 >
                     <template slot-scope="scope">
-                        <el-input-number
-                            :min="1"
-                            :max='scope.row.inventory'
-                            v-model="scope.row.selling_num"
-                        >1</el-input-number>
+                        {{scope.row.selling_num}}
                     </template>
                 </el-table-column>
                 <!--        商品小计-->
@@ -129,7 +125,7 @@
 </script>
 
 <style scoped>
-  
+
   .title h3{
     font-size: 23px;
     color: #c91623;

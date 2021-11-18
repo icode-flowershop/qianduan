@@ -18,9 +18,7 @@
         </el-input>
         <p style="color: #BFBFBF;">
           <span>热门搜索：</span>
-
         </p>
-
       </div>
     </el-container>
 
@@ -32,18 +30,12 @@
         </div>
         <div style="float: left;width: 80%;">
               <div class="card"  v-for="(item, index) in goodsList" :key="item.id" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)">
-                  <div class="ribbon">
+                  <div class="ribbon" @click="goGoodsDesc(item.id)">
                     <!--鼠标移入移出事件-->
                     <div class="handleDialog" v-if="ishow && index==current">
-                      <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.id)">查看详情</el-button>
                     </div>
                     <img :src="item.img" style="height: 100%;width: 100%">
-                  <!--
-                    //商品彩带
-                      <div class="wrap">】
-                        <span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">{{item.fname}}</span></span>
-                  </div>
-                   -->
+
                 </div>
                 <div style="text-align:center">
                   <span>{{item.fname}}</span>
@@ -198,61 +190,7 @@
     color: white;
   }
 
-  .wrap {
-    width: 100%;
-    height: 188px;
-    position: absolute;
-    top: -8px;
-    left: 8px;
-    overflow: hidden;
-  }
-  .wrap:before {
-    content: "";
-    display: block;
-    border-radius: 8px 8px 0px 0px;
-    width: 40px;
-    height: 8px;
-    position: absolute;
-    right: 100px;
-    background: #4D6530;
-  }
-  .wrap:after {
-    content: "";
-    display: block;
-    border-radius: 0px 8px 8px 0px;
-    width: 8px;
-    height: 40px;
-    position: absolute;
-    right: 0px;
-    top: 100px;
-    background: #4D6530;
-  }
-  .ribbon6 {
-    display: inline-block;
-    text-align: center;
-    width: 200px;
-    height: 40px;
 
-    line-height: 40px;
-    position: absolute;
-    top: 30px;
-    right: -50px;
-    z-index: 2;
-    overflow: hidden;
-    transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    border: 1px solid #4D6530;
-     box-shadow: 1px 1px 108.8px 19.2px rgb(192, 212, 210);
 
-  }
-  .ribbon6:nth-child(odd){
-    background: linear-gradient(-225deg, #02412e 50%, #6e626c 50%);
-  }
-  .ribbon6:nth-child(even){
-        background: linear-gradient(-225deg, #e3fdf5 50%, #ffe6fa 50%);
 
-  }
 </style>

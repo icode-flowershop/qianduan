@@ -7,7 +7,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: () => import( '../components/back/Home'),
+            component: () => import( '../components/login'),
         },
         {
             path: '/mallHome',
@@ -66,5 +66,13 @@ export default new Router({
               meta: { title: '商品详情' },
           },
       ],
-  },]
+  },],
+  /* 用来解决跳转路由后滚动条没有在最顶端*/
+     scrollBehavior(to, from, saveTop){
+          if (saveTop) {
+              return saveTop;
+          } else {
+              return {x: 0, y: 0}
+          }
+      }
 })
