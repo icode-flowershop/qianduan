@@ -6,11 +6,11 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
-            path: '/',
+            path: '/login',
             component: () => import( '../components/login'),
         },
         {
-            path: '/mallHome',
+            path: '/',
             component: () => import( '../components/front/layouts/Home.vue'),
             children: [
               {
@@ -41,6 +41,10 @@ export default new Router({
                     path: '/userInfo',
                     component: () => import( '../components/front/page/userInfo.vue'),
                 },
+                {
+                  path: '/addressInfo',
+                  component: () => import( '../components/front/page/addressInfo.vue'),
+              },
 
             ],
         },

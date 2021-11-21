@@ -1,180 +1,185 @@
 <template>
-  <div class="header">
-    <!-- 前往主页按钮 -->
-    <router-link to="/mallHome" style="color: #F2F8FE">
+    <div>
+        <div id="nav">
+            <router-link class="left logo" to="/" tag="div"> <img src="../../../assets/img/logo.png" alt=""/></router-link>
+            <router-link class="left" to="/">Home</router-link>
+            <router-link class="left" to="/">FlowerWorld</router-link>
+            <router-link class="left" to="/">Explore</router-link>
 
-      <div class="logo" style="position: absolute;">
-        <div class="collapse-btn">
-          <i class="el-icon-s-home"></i>
-        </div>
-
-        <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../../assets/img/logo.png">
-
-           <i class="el-icon-back" @click="goBackPath" id="back"></i>
-
-      </div>
-
-    </router-link>
-
-    <div class="header-right">
-      <div class="header-user-con">
-
-        <!-- 我的购物车 -->
-        <div class="btn-bell">
-          <el-tooltip effect="dark" content="我的购物车" placement="bottom">
-            <router-link to="/carts">
-              <i class="el-icon-shopping-cart-2"  style="color: #F2F8FE;"></i>
-            </router-link>
-          </el-tooltip>
-        </div>
-
-
-        <!-- 用户头像 -->
-        <div class="user-avator">
-          <img src="../../../assets/img/userIMG.png" />
-        </div>
-
-        <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name" @command="handleCommand">
-                    <span class="el-dropdown-link">
-                        {{username}}
-                        <i class="el-icon-caret-bottom"></i>
+            <el-col :span="12" class="right" style="width:fit-content">
+                <el-dropdown trigger="click">
+                    <span class="el-dropdown-link" v-show="isSignIn">
+                        <a class="icon-shezhi iconfont"></a>
                     </span>
-          <el-dropdown-menu slot="dropdown">
-            <router-link to="/myOrders"><el-dropdown-item>我的订单</el-dropdown-item> </router-link>
-            <router-link to="/userInfo"><el-dropdown-item>我的信息</el-dropdown-item> </router-link>
-            <router-link to="/">  <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
-            </router-link>
 
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>
+                                <router-link to="/addressInfo" class="icon-tuichudenglu iconfont dropdown">地址管理</router-link>
+                        </el-dropdown-item>
+
+
+                        <el-dropdown-item>
+                            <div @click="exit">
+                                <router-link to="/login" class="icon-tuichudenglu iconfont dropdown">退出登录</router-link>
+                            </div>
+                        </el-dropdown-item>
+
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-col>
+            <div v-show="!isSignIn">
+                <router-link class="signup" to="/login" tag="a">Sign Up</router-link>
+                <div id="shuxian">|</div>
+                <router-link class="signin " to="/login" tag="a">Sign In</router-link>
+            </div>
+
+            <router-link class="right icon-yonghu iconfont" to="/userInfo" tag="a"></router-link>
+            <router-link class="right icon-dingdan iconfont" to="/myOrders" tag="a"></router-link>
+            <router-link class="right icon-gouwuche iconfont" to="/carts" tag="a"></router-link>
+            <div class="search">
+                <el-input placeholder="查询商品" v-model="searchContent">
+                    <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                </el-input>
+            </div>
+        </div>
     </div>
-
-  </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        collapse: false,
-        name: 'user',
+    export default {
+        data() {
+            return {
+                collapse: false,
+                name: 'user',
+                isSearch: false,
+                isSignIn: false,
+                searchContent: '',
+                searchList: [],
+            }
+        },
+        mounted() {
+            if (document.body.clientWidth < 1500) {
+                this.collapseChage()
+            }
+            //判断是否用户登入 若登入则显示设置 否则显示signIn signUp
 
-      };
-    },
-    computed: {
-      username() {
-        let username = localStorage.getItem('ms_username');
-        return username ? username : this.name;
-      }
-    },
-    methods: {
-      // 用户名下拉菜单选择事件
-      handleCommand(command) {
-        if (command == 'loginout') {
-          localStorage.removeItem('ms_username');
-          this.$router.push('/login');
-        }
-      },
-      // 侧边栏折叠
-      collapseChage() {
-        this.collapse = !this.collapse;
-        bus.$emit('collapse', this.collapse);
-      },
+            this.isSignIn = JSON.parse(localStorage.getItem('isSignIn'))
+            console.log(this.isSignIn)
+            this.isSignIn = JSON.parse(localStorage.getItem('isSignIn'))
+            console.log(this.isSignIn)
+        },
+        computed: {
+            username() {
+                let username = localStorage.getItem('ms_username')
+                return username ? username : this.name
+            },
+        },
+        methods: {
+            search() {
+                console.log(this.searchContent)
+                if (this.searchContent) {
+                    this.axios.get('/api/beloving/showFlower?message=' + this.searchContent).then(response => {
+                        console.log(response.data)
+                        localStorage.setItem('searchList', JSON.stringify(response.data))
+                        this.searchContent = ''
+                    })
+                }
+            },
 
-      goBackPath(){
-      if(window.history.length>1){
-        this.$router.back();
-      }else{
-        this.$router.push('/');
-      }
-    },
-    },
-    mounted() {
-      if (document.body.clientWidth < 1500) {
-        this.collapseChage();
-      }
+            // 用户名下拉菜单选择事件
+            handleCommand(command) {
+                if (command == 'loginout') {
+                    localStorage.removeItem('ms_username')
+                    this.$router.push('/login')
+                }
+            },
+            // 侧边栏折叠
+            collapseChage() {
+                this.collapse = !this.collapse
+                bus.$emit('collapse', this.collapse)
+            },
+
+            goBackPath() {
+                if (window.history.length > 1) {
+                    this.$router.back()
+                } else {
+                    this.$router.push('/')
+                }
+            },
+            exit() {
+                this.$store.isSignIn = false
+                localStorage.setItem('isSignIn', JSON.stringify(false))
+                localStorage.setItem('userInfo', JSON.stringify(null))
+            },
+        },
     }
-  };
 </script>
 <style scoped>
-#back,#next{
-  line-height: 1.5em;
-  width: 1.5em;
-  height: 30px;
-  position : absolute;
-  margin-top:20px;
-  margin-left:20px;
-}
-#next{
-  margin-left: 60px;
-}
-  .header {
-    position: relative;
-    box-sizing: border-box;
-    width: 100%;
-    height: 70px;
-    font-size: 22px;
-    color: #fff;
-    background-color: rgb(121, 124, 94);
-  }
-  .collapse-btn {
-    float: left;
-    padding: 0 21px;
-    cursor: pointer;
-    line-height: 70px;
-  }
-  .header .logo {
-    float: left;
-    width: 250px;
-    line-height: 70px;
-  }
-  .header-right {
-    float: right;
-    padding-right: 50px;
-  }
-  .header-user-con {
-    display: flex;
-    height: 70px;
-    align-items: center;
-  }
-  .btn-bell,
-  .btn-fullscreen {
-    position: relative;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    border-radius: 15px;
-    cursor: pointer;
-  }
-  .btn-bell-badge {
-    position: absolute;
-    right: 0;
-    top: -2px;
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    background: #f56c6c;
-    color: #fff;
-  }
-  .btn-bell .el-icon-bell {
-    color: #fff;
-  }
-  .user-name {
-    margin-left: 10px;
-  }
-  .user-avator {
-    margin-left: 20px;
-  }
-  .user-avator img {
-    display: block;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  .el-dropdown-link {
-    color: #fff;
-    cursor: pointer;
-  }
+    @import '../../../assets/icon/header.css';
+    #nav{
+        position: fixed;
+        padding: 2% 15%;
+        height: 10%;
+        width:73%;
+        z-index: 999;
+        padding-bottom: 0;
+        background-color: #DCDFE6;
 
+    }
+    .left{
+        font-size: 16px;
+        float: left;
+        padding: 1% 1%;
+        line-height: 5%;
+    }
+    .right {
+        float: right;
+        padding: 2% 1%;
+        line-height: 5%;
+    }
+    .signup,
+    .signin {
+        float: right;
+        font-size: 14px;
+        text-align: center;
+        margin-right: 1%;
+        margin-top: 1.5%;
+    }
+    #shuxian {
+        float: right;
+        margin-top: 1.2%;
+        margin-right: 0.5%;
+    }
+    .logo {
+        padding: 0;
+        margin-left: 4%;
+        margin-right: 2%;
+    }
+    .logo img {
+        height: 70px;
+    }
+    a {
+        text-decoration: none;
+        text-align: center;
+        margin-top: 1%;
+        color: black;
+    }
+    .iconfont {
+        margin-top: 0;
+    }
+    .search {
+        float: right;
+        margin-top: 1%;
+        margin-right: 1%;
+    }
+
+    /* 下拉 */
+    .dropdown {
+        font-size: 14px;
+    }
+    .demonstration {
+        display: block;
+        color: #8492a6;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
 </style>

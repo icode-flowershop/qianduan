@@ -15,6 +15,9 @@ const state ={
 const userInfo = {
   //在登录界面获取用户名和用户id
 };
+const isSignIn = false;
+
+const searchList = [];
 
 const user = {
   setLocalStorage(str){
@@ -32,6 +35,8 @@ export default new Vuex.Store({
 	state,
   userInfo,//用来存储用户名和id
   user,//对用户信息的操作
+  isSignIn,
+  searchList,
    /* vuex数据持久化配置 */
 	plugins: [
 		createPersistedState({

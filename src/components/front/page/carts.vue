@@ -5,6 +5,7 @@
         <!--表头-->
         <div class="title" style="width: 80%; margin-left: 10%">
             <h3>购物车</h3>
+            <br />
             <el-table
                 :data="goodsInfos.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
                 @selection-change="handleSelectionChange"
@@ -19,17 +20,18 @@
                     </template>
                 </el-table-column>
                 <!--        商品名字-->
-                <el-table-column label="商品名" prop="fname" align="center"></el-table-column>
+                <el-table-column label="商品名" prop="fname" align="center" width="210px"></el-table-column>
                 <!--        花语-->
-                <el-table-column label="花语" prop="says" width="110px" align="center"> </el-table-column>
+                <el-table-column label="花语" prop="says" width="310px" align="center"> </el-table-column>
                 <!--        商品单价-->
-                <el-table-column label="单价" prop="price" width="110px" align="center">
+                <el-table-column label="单价" prop="price" width="70px" align="center">
                     <template slot-scope="scope"> <span>&yen;</span>{{ scope.row.price }} </template>
                 </el-table-column>
                 <!--        商品数量-->
-                <el-table-column label="数量" prop="inventory" width="140px" align="center">
+                <el-table-column label="数量" prop="inventory" width="70px" align="center">
                     <template slot-scope="scope">
-                        <el-input-number :min="1" :max="scope.row.inventory" v-model="scope.row.selling_num"></el-input-number>
+                        <!-- <el-input-number :min="1" :max="scope.row.inventory" v-model="scope.row.selling_num"></el-input-number> -->
+                        {{ scope.row.selling_num }}
                     </template>
                 </el-table-column>
                 <!--        商品小计-->
@@ -42,8 +44,8 @@
                         <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
                     </template>
                     <template slot-scope="scope">
-                        <el-button size="mini" type="danger" @click="removeCart(scope.row)">移出购物车</el-button>
                         <el-button size="mini" type="success">结算</el-button>
+                        <el-button size="mini" type="danger" @click="removeCart(scope.row)">移出购物车</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -86,7 +88,12 @@
             }
         },
         mounted() {
-            this.getData()
+            if (!JSON.parse(localStorage.getItem('userInfo'))) {
+                this.$message.warning('用户未登录，请登录')
+                this.$router.push('/')
+            } else {
+                this.getData()
+            }
         },
 
         methods: {
@@ -96,18 +103,20 @@
                 let { name, id } = userInfo
 
                 this.axios.get('/api/beloving/queryCart?userId=' + id).then(response => {
-                  if(response){//返回1或0
-                     this.data = response.data //返回的是一个数组对象 每一个对象里有一个商品对象flower 和 一个购物车Id
+                    if (response) {
+                        //返回1或0
+                        this.data = []
+                        this.goodsInfos = []
+                        this.data = response.data //返回的是一个数组对象 每一个对象里有一个商品对象flower 和 一个购物车Id
 
-                    for (const item of this.data) {
-                        item.flower.cartId = item.id;
-                        item.flower.selling_num = 1;
-                        this.goodsInfos.push(item.flower);
+                        for (const item of this.data) {
+                            item.flower.cartId = item.id
+                            item.flower.selling_num = 1
+                            this.goodsInfos.push(item.flower)
+                        }
+                    } else {
+                        this.$message.warning('您的购物车为空 快去选购吧！')
                     }
-                  }else{
-                    this.$message.warning("您的购物车为空 快去选购吧！")
-                  }
-
                 })
             },
             // 多选操作
@@ -129,16 +138,17 @@
             },
             //将商品移出
             removeCart(item) {
-              this.axios.get('/api/beloving/cartDelete?id='+item.cartId).then((response) => {
-                this.data = this.data;
-              })
+                this.axios.get('/api/beloving/cartDelete?id=' + item.cartId).then(response => {
+                    this.goodsInfos = []
+                    this.getData()
+                })
             },
             //删除所有选中的商品
             removeCheckedCart() {
-              for (const item of this.multipleSelection) {
-                this.removeCart(item);
-              }
-              },
+                for (const item of this.multipleSelection) {
+                    this.removeCart(item)
+                }
+            },
         },
     }
 </script>

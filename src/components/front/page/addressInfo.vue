@@ -1,30 +1,5 @@
 <template>
     <div>
-        <div id="userInfo">
-            <div>
-                <img src="../../../assets/img/userIMG.png" alt="" />
-            </div>
-            <br />
-            <el-form :model="userInfo" label-width="80px">
-                <el-form-item label="用户名">
-                    <el-input v-model="userInfo.username" size="medium" :disabled="editable"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" v-show="!editable">
-                    <el-input v-model="userInfo.password" size="medium"></el-input>
-                </el-form-item>
-
-                <el-form-item label="用户id" v-show="editable">
-                    <el-input v-model="userInfo.id" size="medium" :disabled="editable"></el-input>
-                </el-form-item>
-
-
-
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit" v-show="!editable">提交修改</el-button>
-                    <el-button type="primary" @click="editabled" v-show="editable">修改用户信息</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
         <div id="addressInfo">
             <el-card class="box-card">
                 <div slot="header" class="clearfix">
@@ -38,12 +13,16 @@
                 </div>
             </el-card>
         </div>
+        <div class="input">
+           <el-input placeholder="请输入内容" v-model="defalutAddress.address" clearable width='fit-content'> </el-input>
+        </div>
+
     </div>
 </template>
 
 <script>
     export default {
-        name: 'userInfo',
+        name: 'addressInfo',
         data() {
             return {
                 addressInfo: {
@@ -56,7 +35,8 @@
                 addresses: [],
                 editable: true,
 
-                userInfo: {//获取的所有用户信息
+                userInfo: {
+                    //获取的所有用户信息
                     username: '',
                     password: '',
                     phone: '',
@@ -65,7 +45,8 @@
                     taddress: '',
                     id: '',
                 },
-                 userInfoChanged: {//获取的所有用户信息
+                userInfoChanged: {
+                    //获取的所有用户信息
                     username: '',
                     password: '',
                     phone: '',
@@ -94,8 +75,8 @@
             getData() {
                 this.axios.get('/api/beloving/userDetail?username=' + this.user.username).then(response => {
                     //接收传来的用户信息
-                    this.userInfo = response.data;
-                    this.userInfoChanged = JSON.parse(JSON.stringify(this.userInfo));
+                    this.userInfo = response.data
+                    this.userInfoChanged = JSON.parse(JSON.stringify(this.userInfo))
                     //将地址信息转换
                     this.addressTransform(this.userInfo.faddress)
                     this.addressTransform(this.userInfo.saddress)
@@ -133,41 +114,7 @@
                 this.defalutAddress = address
             },
 
-            editabled() {
-                this.editable = !this.editable
-                let userInfo = document.querySelector('#userInfo')
-                let addressInfo = document.querySelector('#addressInfo')
-                userInfo.style.marginLeft = '20%'
-                addressInfo.style.display = 'block'
-            },
-            onSubmit() {
-                this.editable = !this.editable
-                //修改样式
-                let userInfo = document.querySelector('#userInfo')
-                let addressInfo = document.querySelector('#addressInfo')
-                userInfo.style.marginLeft = '40%'
-                addressInfo.style.display = 'none'
-                //发送请求
-                this.sendUpdateRequest();
-                this.exit();
-            },
-            sendUpdateRequest() {
-              //修改用户名
-                if(this.userInfoChanged.username!=this.userInfo.username){
-                  console.log(this.userInfoChanged.username)
-                   this.axios.get(`/api/beloving/updateUsername?id=${this.userInfo.id}&username=${this.userInfo.username}`).then(response => {
-                })
-                }
-
-              //修改用户密码
-                if(this.userInfoChanged.password!=this.userInfo.password){
-                this.axios
-                    .get('/api/beloving/updatePassword?id=' + this.userInfo.id + '&password=' + this.userInfo.password + '&valid=' + this.userInfo.password)
-                    .then(response => {
-                    })
-                    }
-            },
-            changeAddress(){
+            changeAddress() {
                 //修改用户地址
                 let constant = 0
                 for (const [index, item] of this.addresses.entries()) {
@@ -177,15 +124,12 @@
                 let info = ''
                 info = ((info.concat(name) + ',').concat(phone) + ',').concat('123')
                 this.axios.get(`/api/beloving/updateAddress?constant=${constant}&id=${this.userInfo.id}&address=${info}`).then(response => {
+                   if(response){
+                  this.$message.success("修改地址成功");
+                }
                 })
+
             },
-              exit(){
-              this.$store.isSignIn = false;
-              localStorage.setItem('isSignIn', JSON.stringify(false));
-              localStorage.setItem('userInfo', JSON.stringify(null));
-              this.$router.push('/');
-            },
-            editPwd() {},
         },
     }
 </script>
@@ -202,18 +146,14 @@
         margin-left: 60px;
     }
 
-    #userInfo {
-        text-align: center;
-        float: left;
-        width: 20%;
-        margin-left: 40%;
-        margin-top: 5%;
-    }
-    #addressInfo {
+    #addressInfo,.input{
         float: right;
         margin-top: 8%;
-        margin-right: 20%;
-        display: none;
+        margin-right: 35%;
+    }
+    .input {
+      margin-top: 1%;
+      width: 480px;
     }
 
     /* 卡片 */

@@ -7,7 +7,7 @@
         ref="multipleTable"
         @row-click="goOrder"
         :span-method="objectSpanMethod"
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="orderList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%;">
         <el-table-column label="订单号" prop="name" align="center"></el-table-column>
         <el-table-column label="订单金额" prop="name" align="center"></el-table-column>
@@ -55,35 +55,19 @@
     data()
     {
       return{
-        tableData: [{
-          name: '华为P40 Pro',
-          price:5988.00,
-          status:"1",
-          img:"http://05imgmini.eastday.com/mobile/20200507/20200507135939_9e1683aae3ee6fe14f853d422cdc32be_2.jpeg",
-          nums:1
-        },{
-          name: '华为P40 Pro',
-          price:5988.00,
-          status:"1",
-          img:"http://05imgmini.eastday.com/mobile/20200507/20200507135939_9e1683aae3ee6fe14f853d422cdc32be_2.jpeg",
-          nums:1
-        }, {
-          name: 'iPhone 11 Pro Max',
-          price:6338.90,
-          status:"2",
-          img:"https://img12.360buyimg.com/n1/jfs/t1/68636/31/9824/169738/5d780ed7E97e88252/7b62380330636738.jpg",
-          nums:2
-        }, {
-          name: 'iPhone 11 Pro Max',
-          price:6338.90,
-          status:"2",
-          img:"https://img12.360buyimg.com/n1/jfs/t1/68636/31/9824/169738/5d780ed7E97e88252/7b62380330636738.jpg",
-          nums:2
-        }],
+        orderList: [],
         search : '',
       }
     },
-    created() {
+    mounted(){
+       if(!JSON.parse(localStorage.getItem('userInfo'))){
+              this.$message.warning("用户未登录，请登录");
+              this.$router.push('/');
+            }else{
+
+            }
+
+
     },
     methods:{
       orderStatus(status)

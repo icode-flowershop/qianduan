@@ -1,196 +1,228 @@
 <template>
-  <div>
-
-
-    <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
-      <el-carousel-item v-for="item in imageList" :key="item.id">
-        <img src="../../../assets/img/001.jpeg">
-      </el-carousel-item>
-    </el-carousel>
-    <br>
-    <el-container>
-      <div style="float: left;width: 25%;">
-        <!--左边栏空白占位  -->
-      </div>
-      <div style="float: left;width: 50%;">
-        <el-input placeholder="查询商品" v-model="selectd" class="input-with-select" size="1000px">
-          <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-        <p style="color: #BFBFBF;">
-          <span>热门搜索：</span>
-        </p>
-      </div>
-    </el-container>
-
-    <br>
     <div>
-      <el-container >
-        <div style="float: left;width: 10%;background-color: #DCDFE6;">
-          <!--左边栏空白占位  -->
+        <div class="nav">
+            <div>
+                <p id="nav_title">SHOPPING OPTIONS</p>
+            </div>
+
+            <div>
+                <ul class="itemClass">
+                    <p class="itemClass_big">Price</p>
+                    <li class="itemClass_little">0~100</li>
+                    <li class="itemClass_little">100~399</li>
+                    <li class="itemClass_little">400以上</li>
+                </ul>
+            </div>
+            <div>
+                <ul class="itemClass">
+                    <p class="itemClass_big">种类</p>
+                    <li class="itemClass_little">0~100</li>
+                    <li class="itemClass_little">100~399</li>
+                    <li class="itemClass_little">400以上</li>
+                </ul>
+            </div>
+            <div>
+                <ul class="itemClass">
+                    <p class="itemClass_big">颜色</p>
+                    <li class="itemClass_little">0~100</li>
+                    <li class="itemClass_little">100~399</li>
+                    <li class="itemClass_little">400以上</li>
+                </ul>
+            </div>
         </div>
-        <div style="float: left;width: 80%;">
-              <div class="card"  v-for="(item, index) in goodsList" :key="item.id" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)">
-                  <div class="ribbon" @click="goGoodsDesc(item.id)">
-                    <!--鼠标移入移出事件-->
-                    <div class="handleDialog" v-if="ishow && index==current">
+        <div style="margin-left:2%">
+            <div style="margin-bottom: 1.7%;">
+                <p id="flower_title">Browse Design</p>
+                <el-select v-model="value" placeholder="请选择" id="flower_sort">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                </el-select>
+            </div>
+            <div>
+                <hr />
+            </div>
+            <div>
+                <el-pagination id="pagination" background layout="prev, pager, next" :total="goodsList.length"> </el-pagination>
+            </div>
+
+            <div class="showFlower">
+                <el-container>
+                    <div>
+                        <div
+                            class="card"
+                            v-for="(item, index) in goodsList"
+                            :key="item.id"
+                            v-on:mouseenter="showDialog(index)"
+                            v-on:mouseleave="hideDialog(index)"
+                        >
+                            <router-link tag="a" :to="{ path: '/goodsDesc', query: { goodId: item.id } }">
+                                <div class="ribbon">
+                                    <!--鼠标移入移出事件-->
+                                    <div class="handleDialog" v-if="ishow && index == current"></div>
+                                    <img :src="item.img" style="height: 100%;width: 100%" />
+                                </div>
+                                <div>
+                                    <a
+                                        ><span style="float:left; margin-left:10%">{{ item.fname }}</span></a
+                                    >
+                                    <a
+                                        ><span style="float: right">￥{{ item.price }}</span></a
+                                    >
+                                </div>
+                            </router-link>
+                        </div>
                     </div>
-                    <img :src="item.img" style="height: 100%;width: 100%">
-
-                </div>
-                <div style="text-align:center">
-                  <span>{{item.fname}}</span>
-                  <span>&yen;{{item.price}}</span>
-                  <span style="overflow:hidden">{{item.says}}</span>
-                </div>
-              </div>
+                </el-container>
+            </div>
         </div>
-        <div style="float: left;width: 10%;background-color: #DCDFE6;">
-          <!--右边栏空白占位  -->
-        </div>
-
-      </el-container>
-      <br>
-      <center>
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="1000">
-        </el-pagination>
-      </center>
     </div>
-  </div>
 </template>
 
 <script>
-  export default {
-      name: "index",
-      data() {
-        return {
-          ishow: false,
-          current: 0,
-          selectd: '',
-          currentDate: new Date(),
-          imageList:[
-            {id:1,title:"test1", address:""},
-            {id:2,title:"test1", address:""},
-            {id:3,title:"test1", address:""},
-            {id:4,title:"test1", address:""},
-          ],
-          goodsList:[
-
-          ]
-        };
-      },
-      mounted(){
-        this.getAllGoods();
-
-
-      },
-      methods:{
-         showShufflingFigure(){
-          this.axios.post('/api/beloving/shuffling').then((resp) => {
-            this.imagelist =resp.data;
-            console.log(resp);
-          })
-
-        },
-
-        getAllGoods(){
-          this.axios.get('/api/beloving/showFlower')
-          .then((resp)=>{
-            console.log(resp)
-            this.goodsList = resp.data;
-
-          })
-        },
-        //前往商品详情页
-        goGoodsDesc(goodId) {
-          this.$router.push({
-            path:'/goodsDesc',
-            query:{
-              goodId:goodId
+    export default {
+        name: 'index',
+        data() {
+            return {
+                ishow: false,
+                current: 0,
+                selectd: '',
+                goodsList: [],
+                options: [
+                    {
+                        value: '选项1',
+                        label: '按评分最高',
+                    },
+                    {
+                        value: '选项2',
+                        label: '按价格最高',
+                    },
+                    {
+                        value: '选项3',
+                        label: '按价格最低',
+                    },
+                    {
+                        value: '选项4',
+                        label: '最新上市',
+                    },
+                ],
+                value: '选择排序方式',
             }
-          });
         },
-        //显示操作项
-        showDialog(index, item) {
-          this.ishow = true;
-          this.current = index;
+        mounted() {
+            //获取需要展示的商品信息
+            this.getAllGoods()
+            localStorage.setItem('searchList', JSON.stringify(null))
         },
-        //隐藏蒙层
-        hideDialog(index, item) {
-          this.ishow = false;
-          this.current = null;
-        }
-      }
+        methods: {
+            getAllGoods() {
+                let data = JSON.parse(localStorage.getItem('searchList'))
+                if (!data) {
+                    this.axios.get('/api/beloving/showFlower').then(resp => {
+                        this.goodsList = resp.data
+                    })
+                } else {
+                    this.goodsList = data
+                }
+            },
+
+            //显示操作项
+            showDialog(index, item) {
+                this.ishow = true
+                this.current = index
+            },
+            //隐藏蒙层
+            hideDialog(index, item) {
+                this.ishow = false
+                this.current = null
+            },
+        },
     }
 </script>
-
 <style scoped>
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 200px;
-    margin: 0;
-  }
-  .el-carousel__item img {
-    width: 100%;
-  }
-  /**
+    .nav {
+        float: left;
+        width: 25%;
+        border: 1px solid black;
+        height: fit-content;
+    }
+    #nav_title {
+        margin: 10% auto;
+        margin-left: 3%;
+    }
+    .itemClass {
+        margin: 0;
+        padding-left: 10%;
+    }
+    .itemClass_big {
+        font-size: 15px;
+    }
+    .itemClass_little {
+        font-size: 13px;
+        color: rgb(61, 80, 69);
+    }
+    .showFlower {
+        float: left;
+        width: 74%;
+    }
+    #flower_title {
+        font-size: 24px;
+        float: left;
+        margin: 1%;
+        margin-right: 39%;
+    }
+    #flower_sort {
+        float: right;
+    }
+
+    /**
   隐藏页
   */
-  .handleDialog {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.6);
-    width: 100%;
-    height: 100%;
-  }
+    .handleDialog {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 100%;
+    }
 
-
-  /**
+    #pagination {
+        float: right;
+    }
+    /**
   卡片
    */
-
-  .card{
-    height: 350px;
-    width: 266px;
-    margin-left: 30px;
-    margin-top: 30px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 4px;
-    float: left;
-    overflow:hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .card img {
-    width: 100%;
-    height: 70%;
-  }
-  .card span {
-    font-size: 15px;
-    color: #BFBFBF;
-    display: block;
-    letter-spacing: 2px;
-  }
-/**
+    .card {
+        height: 5%;
+        width: 32%;
+        margin-left: 1%;
+        margin-top: 1%;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        float: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .card img {
+        width: 100%;
+        height: 70%;
+    }
+    .card span {
+        font-size: 15px;
+        color: #bfbfbf;
+        display: block;
+        letter-spacing: 2px;
+    }
+    /**
 丝带
  */
 
-  .ribbon {
-    display: inline-block;
-    width: 100%;
-    height: 70%;
-    position: relative;
-    margin-bottom: 30px;
-    background-size: cover;
-    text-transform: uppercase;
-    color: white;
-  }
-
-
-
-
+    .ribbon {
+        display: inline-block;
+        width: 100%;
+        height: 80%;
+        position: relative;
+        margin-bottom: 6%;
+        background-size: cover;
+        text-transform: uppercase;
+        color: white;
+    }
 </style>

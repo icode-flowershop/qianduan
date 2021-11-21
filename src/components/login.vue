@@ -60,8 +60,7 @@
                         } else {
                             //将用户信息存储在$store中
                             this.userStorage();
-
-                            this.$router.push('/mallHome')
+                            this.$router.push('/')
                         }
                     } else {
                         this.$message.warning('账号密码错误,登录失败')
@@ -80,7 +79,12 @@
                     //加入缓存前先清除之前用户登录的缓存
                     localStorage.clear();
                     //将用户信息和id传如浏览器缓存中
-                    localStorage.setItem('userInfo', JSON.stringify(this.$store.userInfo))
+                    localStorage.setItem('userInfo', JSON.stringify(this.$store.userInfo));
+                    this.$store.isSignIn = true;
+                    localStorage.setItem('isSignIn', JSON.stringify(this.$store.isSignIn));
+                    console.log(JSON.parse(localStorage.getItem('isSignIn')))
+                    
+
                 })
             },
 

@@ -10,7 +10,6 @@
                     <p>{{ goodsInfo.fname }}</p>
                 </div>
                 <hr />
-
                 <div class="info-msg">
                     <span class="fl">材料:</span>
                     <p class="fr">{{ goodsInfo.material }}</p>
