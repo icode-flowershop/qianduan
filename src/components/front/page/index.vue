@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="nav">
+           
             <div>
                 <p id="nav_title">SHOPPING OPTIONS</p>
             </div>
@@ -33,14 +34,25 @@
         <div style="margin-left:2%">
             <div style="margin-bottom: 1.7%;">
                 <p id="flower_title">Browse Design</p>
-                <el-select v-model="value" placeholder="请选择" id="flower_sort">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-                </el-select>
+                <div class="search">
+                    <el-input placeholder="查询商品" v-model="searchContent" maxlength="100px">
+                        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                    </el-input>
+                </div>
             </div>
             <div>
                 <hr />
             </div>
             <div>
+                <el-select
+                    v-model="value"
+                    placeholder="请选择"
+                    id="flower_sort"
+                    size="small"
+                    style="margin-left: 0.8%;width: 130px;"
+                >
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                </el-select>
                 <el-pagination id="pagination" background layout="prev, pager, next" :total="goodsList.length"> </el-pagination>
             </div>
 
@@ -86,6 +98,8 @@
                 current: 0,
                 selectd: '',
                 goodsList: [],
+                searchContent: '',
+                searchList: [],
                 options: [
                     {
                         value: '选项1',
@@ -99,10 +113,6 @@
                         value: '选项3',
                         label: '按价格最低',
                     },
-                    {
-                        value: '选项4',
-                        label: '最新上市',
-                    },
                 ],
                 value: '选择排序方式',
             }
@@ -110,18 +120,21 @@
         mounted() {
             //获取需要展示的商品信息
             this.getAllGoods()
-            localStorage.setItem('searchList', JSON.stringify(null))
         },
         methods: {
+            search(){
+                if (this.searchContent) {
+                    this.axios.get('/api/beloving/showFlower?message=' + this.searchContent).then(response => {
+                        console.log(response.data)
+                        this.goodsList = response.data
+                        this.searchContent = ''
+                    })
+                }
+            },
             getAllGoods() {
-                let data = JSON.parse(localStorage.getItem('searchList'))
-                if (!data) {
                     this.axios.get('/api/beloving/showFlower').then(resp => {
                         this.goodsList = resp.data
                     })
-                } else {
-                    this.goodsList = data
-                }
             },
 
             //显示操作项
@@ -170,7 +183,13 @@
         margin-right: 39%;
     }
     #flower_sort {
-        float: right;
+        margin-left: 3%;
+        width: 130px;
+    }
+
+    .el-input-group {
+        width: 20%;
+        padding-top: 0.81%;
     }
 
     /**
@@ -190,7 +209,7 @@
   卡片
    */
     .card {
-        height: 5%;
+        height: 300px;
         width: 32%;
         margin-left: 1%;
         margin-top: 1%;
@@ -201,10 +220,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-    .card img {
-        width: 100%;
-        height: 70%;
-    }
+
     .card span {
         font-size: 15px;
         color: #bfbfbf;

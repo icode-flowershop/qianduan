@@ -79,9 +79,9 @@
                     inventory: 0,
                 },
                 //获取用户名和ID
-                userInfo:{
-                  username: '',
-                  id: 0 ,
+                userInfo: {
+                    username: '',
+                    id: 0,
                 },
                 selling_num: 1,
                 tips: '温馨提示·不支持7天无理由退货',
@@ -97,10 +97,9 @@
             if (this.$route.query.goodId == null) {
                 this.$router.push('/helloHome')
             }
-            this.getUserInfo();
+            this.getUserInfo()
             this.goodsId = this.$route.query.goodId
-            this.getdate();
-
+            this.getdate()
         },
         methods: {
             //商品数据更新
@@ -110,8 +109,8 @@
                 })
             },
             //获取用户信息
-            getUserInfo(){
-              this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            getUserInfo() {
+                this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
             },
 
             handleChange(value) {
@@ -130,7 +129,6 @@
             //添加进购物车
             addCart() {
                 this.axios.get(`/api/beloving/cartInsert?userId=${this.userInfo.id}&flowerId=${this.goodsId}`).then(response => {
-                  console.log(response);
                     if (!response) {
                         this.$message.warning('商品已经在购物车中')
                         this.$notify.error({
@@ -147,7 +145,6 @@
                     }
                 })
             },
-
         },
     }
 </script>
@@ -155,7 +152,7 @@
 <style scoped>
     .goodsBox {
         width: 100%;
-        margin: 50px auto;
+        margin: 2% 3%;
         background-color: rgb(245, 245, 245);
     }
 
@@ -177,12 +174,12 @@
     }
     .goods-img {
         float: left;
-        box-sizing: content-box;
-        margin: 0 50px;
+        padding-right: 4%;
+        width: 30%;
     }
     .goods-img > img {
-        width: 360px;
-        height: 500px;
+        width: 100%;
+        height: 100%;
     }
     .info-msg {
         margin-top: 10px;
@@ -197,8 +194,8 @@
 
     .goods-info {
         float: left;
-        width: 670px;
-        height: 505px;
+        width: 66%;
+        height: 100%;
         margin-bottom: 0;
     }
     .info-price {

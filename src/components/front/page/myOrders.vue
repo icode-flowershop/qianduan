@@ -1,3 +1,4 @@
+import axios from 'axios';
 <template>
   <div>
     <!--表头-->
@@ -5,42 +6,27 @@
       <h3>我的订单</h3>
       <el-table
         ref="multipleTable"
-        @row-click="goOrder"
-        :span-method="objectSpanMethod"
-        :data="orderList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="orderList"
         style="width: 100%;">
-        <el-table-column label="订单号" prop="name" align="center"></el-table-column>
-        <el-table-column label="订单金额" prop="name" align="center"></el-table-column>
-        <el-table-column label="订单状态" prop="name" align="center"></el-table-column>
-        <el-table-column label="下单时间" prop="name" align="center"></el-table-column>
-        <el-table-column label="支付时间" prop="name" align="center"></el-table-column>
-        <!--        上下架状态-->
-        <el-table-column label="状态"  prop="prize" width="110px" align="center">
-          <template slot-scope="scope">
-            <el-tag :type="orderStatus(scope.row.status)">{{scope.row.status==1?"未支付":"已支付"}}</el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column align="center" type="selection" width="100%"></el-table-column>
+        <el-table-column label="订单号" prop="id" align="center"></el-table-column>
         <!--        商品图片-->
-        <el-table-column label="商品" prop="img" width="110px" align="center">
+        <el-table-column label="商品"  width="110px" align="center">
           <template slot-scope="scope">
             <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
           </template>
         </el-table-column>
         <!--        商品名字-->
-        <el-table-column label="商品名" prop="name" align="center"></el-table-column>
+        <el-table-column label="商品名" prop="flower.fname" align="center"></el-table-column>
         <!--        商品单价-->
-        <el-table-column label="单价"  prop="prize" width="110px" align="center">
-          <template slot-scope="scope">
-            <span>&yen;</span>{{scope.row.price}}
+        <el-table-column label="单价"  prop="flower.price" width="110px" align="center">
+        </el-table-column>
+          <!--        上下架状态-->
+        <el-table-column label="订单状态"  prop="pay" width="110px" align="center">
+          <template slot-scope="scope" class="payStatus">
+            {{(!scope.row.pay)?'未支付':'已支付'}}
           </template>
         </el-table-column>
-        <!--        商品数量-->
-        <el-table-column label="数量"  prop="prize" width="110px" align="center">
-          <template slot-scope="scope">
-            <span>&yen;</span>{{scope.row.price}}
-          </template>
-        </el-table-column>
-
       </el-table>
     </div>
     <div style="width: 80%;margin-left: 10%;">
@@ -64,31 +50,31 @@
               this.$message.warning("用户未登录，请登录");
               this.$router.push('/');
             }else{
+              this.getData();
 
             }
 
 
     },
     methods:{
-      orderStatus(status)
-      {
-        if(status=="1")
-          return "danger";
-        else if(status=="2")
-          return "";
-      },
-      goOrder(row, column, event)
-      {
-        this.$router.push({
-          path:'/submitOrder',
-          query:{
-            goods:row
-          }
-        });
-      },
-      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      getData(){
+        let { name,id} = JSON.parse(localStorage.getItem('userInfo'));
+        console.log(id);
+        this.axios.get('/api/beloving/queryOrder?userId='+id).then((response) =>{
 
+          for (const item of response.data) {
+            let {id,pay,img,fname,price} = {
+            }
+
+          }
+
+
+          this.orderList = response.data;
+          console.log(this.orderList)
+        })
       },
+
+
     }
   }
 </script>
@@ -101,5 +87,9 @@
     /*float: left;*/
     font-size: 23px;
     color: #c91623;
+  }
+  .payStatus{
+    border: 1px solid #000;
+
   }
 </style>

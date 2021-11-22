@@ -1,7 +1,8 @@
 <template>
     <div>
         <div id="nav">
-            <router-link class="left logo" to="/" tag="div"> <img src="../../../assets/img/logo.png" alt=""/></router-link>
+          <div id="nav_content">
+ <router-link class="left logo" to="/" tag="div"> <img src="../../../assets/img/logo.png" alt=""/></router-link>
             <router-link class="left" to="/">Home</router-link>
             <router-link class="left" to="/">FlowerWorld</router-link>
             <router-link class="left" to="/">Explore</router-link>
@@ -36,11 +37,9 @@
             <router-link class="right icon-yonghu iconfont" to="/userInfo" tag="a"></router-link>
             <router-link class="right icon-dingdan iconfont" to="/myOrders" tag="a"></router-link>
             <router-link class="right icon-gouwuche iconfont" to="/carts" tag="a"></router-link>
-            <div class="search">
-                <el-input placeholder="查询商品" v-model="searchContent">
-                    <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-                </el-input>
-            </div>
+
+          </div>
+
         </div>
     </div>
 </template>
@@ -50,10 +49,9 @@
             return {
                 collapse: false,
                 name: 'user',
-                isSearch: false,
+
                 isSignIn: false,
-                searchContent: '',
-                searchList: [],
+
             }
         },
         mounted() {
@@ -74,16 +72,7 @@
             },
         },
         methods: {
-            search() {
-                console.log(this.searchContent)
-                if (this.searchContent) {
-                    this.axios.get('/api/beloving/showFlower?message=' + this.searchContent).then(response => {
-                        console.log(response.data)
-                        localStorage.setItem('searchList', JSON.stringify(response.data))
-                        this.searchContent = ''
-                    })
-                }
-            },
+
 
             // 用户名下拉菜单选择事件
             handleCommand(command) {
@@ -118,12 +107,13 @@
     #nav{
         position: fixed;
         padding: 2% 15%;
+        top:0;
+        left:0;
         height: 10%;
         width:73%;
         z-index: 999;
         padding-bottom: 0;
-        background-color: #DCDFE6;
-
+    background-color: #f0e0d9
     }
     .left{
         font-size: 16px;
@@ -166,11 +156,7 @@
     .iconfont {
         margin-top: 0;
     }
-    .search {
-        float: right;
-        margin-top: 1%;
-        margin-right: 1%;
-    }
+   
 
     /* 下拉 */
     .dropdown {
@@ -178,6 +164,7 @@
     }
     .demonstration {
         display: block;
+
         color: #8492a6;
         font-size: 14px;
         margin-bottom: 20px;

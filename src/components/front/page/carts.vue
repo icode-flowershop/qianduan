@@ -3,16 +3,10 @@
         <!--头部-->
         <div style="width: 80%; margin-left: 20%"></div>
         <!--表头-->
-        <div class="title" style="width: 80%; margin-left: 10%">
-            <h3>购物车</h3>
-            <br />
-            <el-table
-                :data="goodsInfos.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-                @selection-change="handleSelectionChange"
-                style="width: 100%"
-            >
+        <div class="title" style="width: 100%;">
+            <el-table :data="goodsInfos" @selection-change="handleSelectionChange" style="width: 80%;margin-left:10%">
                 <!--        多选框-->
-                <el-table-column align="center" type="selection" width="55"></el-table-column>
+                <el-table-column align="center" type="selection" width="100%"></el-table-column>
                 <!--        商品图片-->
                 <el-table-column label="商品" prop="img" width="110px" align="center">
                     <template slot-scope="scope">
@@ -21,28 +15,18 @@
                 </el-table-column>
                 <!--        商品名字-->
                 <el-table-column label="商品名" prop="fname" align="center" width="210px"></el-table-column>
-                <!--        花语-->
-                <el-table-column label="花语" prop="says" width="310px" align="center"> </el-table-column>
+
                 <!--        商品单价-->
                 <el-table-column label="单价" prop="price" width="70px" align="center">
                     <template slot-scope="scope"> <span>&yen;</span>{{ scope.row.price }} </template>
                 </el-table-column>
-                <!--        商品数量-->
-                <el-table-column label="数量" prop="inventory" width="70px" align="center">
-                    <template slot-scope="scope">
-                        <!-- <el-input-number :min="1" :max="scope.row.inventory" v-model="scope.row.selling_num"></el-input-number> -->
-                        {{ scope.row.selling_num }}
-                    </template>
-                </el-table-column>
+
                 <!--        商品小计-->
                 <el-table-column label="小计" prop="allPrize" width="110px" align="center">
-                    <template slot-scope="scope"> <span>&yen;</span>{{ parseFloat(scope.row.price * scope.row.selling_num).toFixed(2) }} </template>
+                    <template slot-scope="scope"> <span>&yen;</span>{{ parseFloat(scope.row.price ).toFixed(2) }} </template>
                 </el-table-column>
                 <!--        操作-->
                 <el-table-column align="right">
-                    <template slot="header">
-                        <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
-                    </template>
                     <template slot-scope="scope">
                         <el-button size="mini" type="success">结算</el-button>
                         <el-button size="mini" type="danger" @click="removeCart(scope.row)">移出购物车</el-button>
@@ -51,25 +35,14 @@
             </el-table>
         </div>
         <div style="width: 80%; margin-left: 10%">
-            <!--描述：商品结算开始-->
-            <div class="balance">
-                <ul class="balance_ul1">
-                    <el-button type="danger" size="medium" class="button1" plain @click="removeCheckedCart">删除选中商品</el-button>
-                    <router-link to="/makeSureOrder">
-                        <el-button type="success" size="medium" class="button1" @click="Settlement" plain>结算选中商品</el-button>
-                    </router-link>
 
-                    <span class="balance_ul2">
-                        <span>共<span class="spanText"></span>件商品</span>
-                        <span>总价<span class="spanText">&yen;</span></span>
-                        <span>
-                            <router-link to="/makeSureOrder">
-                                <el-button @click="submitAllOrder">全部结算</el-button>
-                            </router-link>
-                        </span>
-                    </span>
-                </ul>
+  <div class="balance">
+                <router-link to="/makeSureOrder">
+                    <el-button @click="Settlement">全部结算</el-button>
+                </router-link>
             </div>
+
+
         </div>
     </div>
 </template>
@@ -81,7 +54,6 @@
             return {
                 data: [],
                 goodsInfos: [],
-                search: '',
                 //选中列表
                 multipleSelection: [],
                 chooseList: [],
@@ -100,7 +72,7 @@
             //获取用户购物车信息
             getData() {
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-                let { name, id } = userInfo
+                let { name, id } = userInfo;
 
                 this.axios.get('/api/beloving/queryCart?userId=' + id).then(response => {
                     if (response) {
@@ -111,7 +83,6 @@
 
                         for (const item of this.data) {
                             item.flower.cartId = item.id
-                            item.flower.selling_num = 1
                             this.goodsInfos.push(item.flower)
                         }
                     } else {
@@ -123,15 +94,17 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val
             },
-            //结算所有商品
-            submitAllOrder() {
-                let obj = this.goodsInfos
+            Settlement() {
+                let obj = this.goodsInfos;
+                console.log(obj);
+                this.$store.state.goodsOrder =[];
                 for (const item of obj) {
                     this.$store.state.goodsOrder.push(item)
                 }
             },
-            Settlement() {
-                let obj = [...this.multipleSelection]
+            submitAllOrder() {
+                let obj = [...this.multipleSelection];
+                console.log(obj);
                 for (const item of obj) {
                     this.$store.state.goodsOrder.push(item)
                 }
@@ -144,11 +117,11 @@
                 })
             },
             //删除所有选中的商品
-            removeCheckedCart() {
+          /*   removeCheckedCart() {
                 for (const item of this.multipleSelection) {
                     this.removeCart(item)
                 }
-            },
+            }, */
         },
     }
 </script>
@@ -164,38 +137,17 @@
     }
 
     /*商品结算*/
-    .balance {
+     .balance {
         height: 50px;
-        border: 1px solid gray;
         margin-top: 40px;
     }
-    .balance li {
-        float: left;
-        line-height: 5px;
-        margin-left: 22px;
-    }
-    .balance_ul2 {
-        float: right;
-        margin-right: 10px;
-    }
-    .balance_ul1 .button1 {
-        margin-top: 5px;
-    }
-    .balance_ul2 .spanText {
-        font-size: 25px;
-        color: #c91623;
-        font-weight: bold;
-    }
-    .balance_ul2 button {
+    .balance button {
         width: 100px;
         height: 50px;
         background-color: brown;
-        border: 1px solid #c91623;
         font-weight: bold;
+        margin-left: 80%;
         font-size: 20px;
         color: white;
-    }
-    .balance_ul2 button:hover {
-        background-color: #c91623;
     }
 </style>

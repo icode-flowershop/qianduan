@@ -12,38 +12,46 @@ export default new Router({
         {
             path: '/',
             component: () => import( '../components/front/layouts/Home.vue'),
+            meta: {name: '首页'},
             children: [
               {
                 path:'/',
                 component: () => import( '../components/front/page/index.vue'),
+                meta: {name: '首页'},
               },
                 {
                     path: '/goodsDesc',
                     component: () => import( '../components/front/page/goodsDesc.vue'),
+                    meta: {name: '详情'},
                 },
                 {
                     path: '/carts',
                     component: () => import( '../components/front/page/carts.vue'),
+                    meta: {name: '购物车'},
                 },
                 {
                     path: '/myOrders',
                     component: () => import( '../components/front/page/myOrders.vue'),
+                    meta: {name: '订单'},
+
                 },
                 {
                     path: '/makeSureOrder',
                     component: () => import( '../components/front/page/makeSureOrder.vue'),
-                },
-                {
-                    path: '/submitOrder',
-                    component: () => import('../components/front/page/submitOrder.vue'),
+                    meta: {name: '确认订单'},
+
                 },
                 {
                     path: '/userInfo',
                     component: () => import( '../components/front/page/userInfo.vue'),
+                    meta: {name: '用户信息'},
+
                 },
                 {
                   path: '/addressInfo',
                   component: () => import( '../components/front/page/addressInfo.vue'),
+                  meta: {name: '地址管理'},
+
               },
 
             ],
