@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="nav">
-           
+
             <div>
                 <p id="nav_title">SHOPPING OPTIONS</p>
             </div>
@@ -125,7 +125,6 @@
             search(){
                 if (this.searchContent) {
                     this.axios.get('/api/beloving/showFlower?message=' + this.searchContent).then(response => {
-                        console.log(response.data)
                         this.goodsList = response.data
                         this.searchContent = ''
                     })

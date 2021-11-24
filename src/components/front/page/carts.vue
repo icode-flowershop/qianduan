@@ -38,7 +38,7 @@
 
   <div class="balance">
                 <router-link to="/makeSureOrder">
-                    <el-button @click="Settlement">全部结算</el-button>
+                    <el-button @click="Settlement">购买商品</el-button>
                 </router-link>
             </div>
 
@@ -56,7 +56,6 @@
                 goodsInfos: [],
                 //选中列表
                 multipleSelection: [],
-                chooseList: [],
             }
         },
         mounted() {
@@ -95,16 +94,16 @@
                 this.multipleSelection = val
             },
             Settlement() {
-                let obj = this.goodsInfos;
-                console.log(obj);
+
                 this.$store.state.goodsOrder =[];
-                for (const item of obj) {
-                    this.$store.state.goodsOrder.push(item)
+                for (const item of this.goodsInfos) {
+                    this.$store.state.goodsOrder.push(item);
+
                 }
+
             },
             submitAllOrder() {
                 let obj = [...this.multipleSelection];
-                console.log(obj);
                 for (const item of obj) {
                     this.$store.state.goodsOrder.push(item)
                 }

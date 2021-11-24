@@ -61,9 +61,7 @@
             //判断是否用户登入 若登入则显示设置 否则显示signIn signUp
 
             this.isSignIn = JSON.parse(localStorage.getItem('isSignIn'))
-            console.log(this.isSignIn)
             this.isSignIn = JSON.parse(localStorage.getItem('isSignIn'))
-            console.log(this.isSignIn)
         },
         computed: {
             username() {
@@ -156,7 +154,7 @@
     .iconfont {
         margin-top: 0;
     }
-   
+
 
     /* 下拉 */
     .dropdown {

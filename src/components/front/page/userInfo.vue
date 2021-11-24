@@ -16,28 +16,13 @@
                 <el-form-item label="用户id" v-show="editable">
                     <el-input v-model="userInfo.id" size="medium" :disabled="editable"></el-input>
                 </el-form-item>
-
-
-
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit" v-show="!editable">提交修改</el-button>
                     <el-button type="primary" @click="editabled" v-show="editable">修改用户信息</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div id="addressInfo">
-            <el-card class="box-card">
-                <div slot="header" class="clearfix">
-                    <span>地址管理</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="changeAddress">修改地址</el-button>
-                </div>
-                <div v-for="(item, index) of addresses" :key="index" class="text item">
-                    <el-checkbox v-model="item.isDefault" :checked="item.isDefault" @change="changeDefaultAddress(item)"></el-checkbox>
-                    <span v-show="item.isDefault">(默认)</span>
-                    地址{{ index + 1 + ':' + item.name + '   ' + item.phone + '   ' + item.address }}
-                </div>
-            </el-card>
-        </div>
+
     </div>
 </template>
 
@@ -46,14 +31,7 @@
         name: 'userInfo',
         data() {
             return {
-                addressInfo: {
-                    name: '',
-                    phone: '',
-                    address: '',
-                    isDefault: false,
-                },
-                defalutAddress: {},
-                addresses: [],
+
                 editable: true,
 
                 userInfo: {//获取的所有用户信息
@@ -96,43 +74,8 @@
                     //接收传来的用户信息
                     this.userInfo = response.data;
                     this.userInfoChanged = JSON.parse(JSON.stringify(this.userInfo));
-                    //将地址信息转换
-                    this.addressTransform(this.userInfo.faddress)
-                    this.addressTransform(this.userInfo.saddress)
-                    this.addressTransform(this.userInfo.taddress)
-                    for (const item of this.addresses) {
-                        if (item.isDefault) this.defalutAddress = item
-                    }
                 })
             },
-            //将地址转换为对象数组
-            addressTransform(address) {
-                if (address == null) return
-                let arr = address.split(',')
-                const names = Object.getOwnPropertyNames(this.addressInfo)
-                for (let i = 0; i < arr.length; i++) {
-                    this.addressInfo[names[i]] = arr[i]
-                }
-                if (this.addresses.length == 0) {
-                    this.addressInfo.isDefault = true
-                }
-                //将地址信息push到addresses数组里面
-                this.addresses.push(this.addressInfo)
-                this.addressInfo = {
-                    name: '',
-                    phone: '',
-                    address: '',
-                    isDefault: false,
-                }
-            },
-            //改变默认地址
-            changeDefaultAddress(address) {
-                for (const item of this.addresses) {
-                    item.isDefault = item == address ? true : false
-                }
-                this.defalutAddress = address
-            },
-
             editabled() {
                 this.editable = !this.editable
                 let userInfo = document.querySelector('#userInfo')
@@ -154,7 +97,6 @@
             sendUpdateRequest() {
               //修改用户名
                 if(this.userInfoChanged.username!=this.userInfo.username){
-                  console.log(this.userInfoChanged.username)
                    this.axios.get(`/api/beloving/updateUsername?id=${this.userInfo.id}&username=${this.userInfo.username}`).then(response => {
                 })
                 }
@@ -167,25 +109,12 @@
                     })
                     }
             },
-            changeAddress(){
-                //修改用户地址
-                let constant = 0
-                for (const [index, item] of this.addresses.entries()) {
-                    if (item == this.defalutAddress) constant = index + 1
-                }
-                let { name, phone, _address, isDefault } = this.defalutAddress
-                let info = ''
-                info = ((info.concat(name) + ',').concat(phone) + ',').concat('123')
-                this.axios.get(`/api/beloving/updateAddress?constant=${constant}&id=${this.userInfo.id}&address=${info}`).then(response => {
-                })
-            },
               exit(){
               this.$store.isSignIn = false;
               localStorage.setItem('isSignIn', JSON.stringify(false));
               localStorage.setItem('userInfo', JSON.stringify(null));
               this.$router.push('/');
             },
-            editPwd() {},
         },
     }
 </script>

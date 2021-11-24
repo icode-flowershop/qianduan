@@ -51,7 +51,6 @@
                 if (this.checkIdentity) this.role = 1
 
                 axios.get(`/api/beloving/login?username=${this.user.username}&password=${this.user.password}&role=${this.role}`).then(resp => {
-                    console.log(resp)
                     if (resp.data) {
                         this.$message.success('登录成功')
                         if (this.checkIdentity) {
@@ -82,8 +81,7 @@
                     localStorage.setItem('userInfo', JSON.stringify(this.$store.userInfo));
                     this.$store.isSignIn = true;
                     localStorage.setItem('isSignIn', JSON.stringify(this.$store.isSignIn));
-                    console.log(JSON.parse(localStorage.getItem('isSignIn')))
-                    
+
 
                 })
             },
@@ -121,7 +119,6 @@
                 ${this.user.password}&phone=${this.user.phone}&role=${this.role}`
                         )
                         .then(response => {
-                            console.log(response)
                             this.$message.success('注册成功')
                         })
                     this.registerClose()

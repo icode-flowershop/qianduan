@@ -1,9 +1,39 @@
 <template>
-    <div>
+    <div style="margin-left:15%">
+
         <!--表头-->
-        <div class="title" style="width: 80%;margin-left: 10%;">
-            <h3>确认订单</h3>
-            <el-table :data="orderInfo" style="width: 100%">
+        <div class="title" style="width: 83%;">
+            <h3>填写订单</h3>
+             <div>
+            <div class="box-Info">
+                <span>收货人:</span>
+                <div class="input">
+                    <span v-html="defaultAddress.name"></span>
+                </div>
+                <span>联系电话:</span>
+                <div class="input">
+                    <span v-html="defaultAddress.phone"></span>
+                </div>
+                <span>收获地址:</span>
+                <div class="input">
+                    <span v-html="defaultAddress.address"></span>
+                </div>
+                <router-link to="/addressInfo">修改</router-link>
+            </div>
+        </div>
+        <br><br>
+
+
+        <div>
+          <el-radio-group v-model="payWay">
+  <el-radio label="zfb">支付宝支付</el-radio>
+  <el-radio label="wx">微信支付</el-radio>
+  <el-radio label="yhk">银行卡支付</el-radio>
+</el-radio-group>
+        </div>
+         <br>
+
+            <el-table :data="orderInfo" style="width: 100%" class="el-table">
                 <!--        商品图片-->
                 <el-table-column label="商品" prop="img" width="110px" align="center">
                     <template slot-scope="scope">
@@ -26,11 +56,13 @@
         <div style="width: 80%;margin-left: 10%;">
             <!--描述：商品结算开始-->
             <div class="balance">
-                <router-link to="/submitOrder">
-                    <el-button @click="submitOrder">提交订单</el-button>
+                    <el-button @click="payOrder">提交订单</el-button>
+            </div>
+            <div class="backCart">
+                <router-link to="/carts">
+                    <el-button>返回购物车</el-button>
                 </router-link>
             </div>
-            <!--描述：商品结算结束-->
         </div>
     </div>
 </template>
@@ -41,35 +73,37 @@
         data() {
             return {
                 orderInfo: [],
-                address: '12341212',
+                defaultAddress: {},
+                payWay:''
             }
-        },
+            },
         mounted() {
             console.log(this.$store.state.goodsOrder)
             this.orderInfo = this.$store.state.goodsOrder
+            this.defaultAddress = JSON.parse(localStorage.getItem('defaultAddress'))
         },
         methods: {
-            submitOrder() {
+            payOrder() {
                 let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-                let { name, id } = userInfo
+                let { username, id } = userInfo
+                let { address, isDefault, name, phone } = this.defaultAddress
+                let info = ''
+                let num = 0
+                info = ((info.concat(name) + ',').concat(phone) + ',').concat(address)
                 for (const item of this.orderInfo) {
-                    this.axios
-                        .post(
-                            '/api/beloving/insertOrder?user=' +
-                                id +
-                                '&goods=' +
-                                item.id +
-                                '&money=' +
-                                item.price * item.selling_num +
-                                '&oaddress=' +
-                                this.address +
-                                '&pay=' +
-                                1
-                        )
+                  if(this.payWay){
+                    this.axios.get('/api/beloving/insertOrder?userId=' + id + '&flowerId=' + item.id + '&money=' + item.price + '&oaddress=' + info + '&pay=' + num)
                         .then(response => {
-                            console.log(response)
+                            if (response) {
+                              console.log(response)
+                            }
                         })
+                  }else{
+                    this.$message.warning('请选择支付方式');
+                  }
+
                 }
+                this.$router.push('/myOrders');
             },
         },
     }
@@ -81,18 +115,43 @@
         color: #c91623;
     }
 
+    .box-Info {
+        width: 100%;
+        float: right;
+        height: 100%;
+        margin-left: 10%;
+        margin-top: 0%;
+        background-color: rgb(240, 224, 217);
+    }
+    .box-Info span {
+        display: inline-block;
+        float: left;
+    }
+    .input {
+        float: left;
+        margin-right: 3%;
+        margin-left: 1%;
+        margin-top: 0%;
+    }
     /*商品结算*/
     .balance {
         height: 50px;
         margin-top: 40px;
     }
-    .balance button {
+    .balance button,
+    .backCart button {
         width: 100px;
         height: 50px;
         background-color: brown;
         font-weight: bold;
+        float: left;
         margin-left: 80%;
         font-size: 20px;
         color: white;
+    }
+    .backCart button {
+        width: 130px;
+        margin-left: 60%;
+        margin-top: -6.3%;
     }
 </style>
