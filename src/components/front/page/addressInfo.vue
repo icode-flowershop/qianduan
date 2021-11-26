@@ -86,7 +86,7 @@
         },
         methods: {
             getData() {
-                this.axios.get('/api/beloving/userDetail?username=' + this.user.username).then(response => {
+                this.axios.get('/api/beloving/userDetail?id=' + this.user.id).then(response => {
                     //接收传来的用户信息
                     this.userInfo = response.data
                     this.userInfoChanged = JSON.parse(JSON.stringify(this.userInfo))

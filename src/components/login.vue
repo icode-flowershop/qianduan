@@ -51,7 +51,9 @@
                 if (this.checkIdentity) this.role = 1
 
                 axios.get(`/api/beloving/login?username=${this.user.username}&password=${this.user.password}&role=${this.role}`).then(resp => {
+                  console.log(resp);
                     if (resp.data) {
+                      this.user.id = resp.data;
                         this.$message.success('登录成功')
                         if (this.checkIdentity) {
                             //push到后台路由
@@ -69,18 +71,21 @@
 
 
             userStorage() {
-                this.axios.get('/api/beloving/userDetail?username=' + this.user.username)
+                this.axios.get('/api/beloving/userDetail?id=' + this.user.id)
                 .then(response => {
+                  console.log(response)
                     this.$store.userInfo = {
                       username:this.user.username,
-                      id:response.data.id
+                      id:this.user.id
                     }
                     //加入缓存前先清除之前用户登录的缓存
-                    localStorage.clear();
+                    localStorage.removeItem('userInfo')
                     //将用户信息和id传如浏览器缓存中
                     localStorage.setItem('userInfo', JSON.stringify(this.$store.userInfo));
                     this.$store.isSignIn = true;
                     localStorage.setItem('isSignIn', JSON.stringify(this.$store.isSignIn));
+                    localStorage.setItem('defaultAddress', JSON.stringify(response.data.faddress));
+
 
 
                 })

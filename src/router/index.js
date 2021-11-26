@@ -14,10 +14,18 @@ export default new Router({
             component: () => import( '../components/front/layouts/Home.vue'),
             meta: {name: '首页'},
             children: [
+
               {
                 path:'/',
-                component: () => import( '../components/front/page/index.vue'),
+                component: () => import( '../components/front/page/mall/index.vue'),
                 meta: {name: '首页'},
+                children:[
+                  {
+                    path:'/leftNav',
+                    component: () => import( '../components/front/page/mall/leftNav.vue'),
+                    meta: {name: '左侧导航条'}
+                  }
+                ],
               },
                 {
                     path: '/goodsDesc',

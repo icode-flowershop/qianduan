@@ -70,26 +70,23 @@
         },
         methods: {
             getData() {
-                this.axios.get('/api/beloving/userDetail?username=' + this.user.username).then(response => {
+                this.axios.get('/api/beloving/userDetail?id=' + this.user.id).then(response => {
                     //接收传来的用户信息
                     this.userInfo = response.data;
+                    console.log(this.userInfo)
                     this.userInfoChanged = JSON.parse(JSON.stringify(this.userInfo));
                 })
             },
             editabled() {
                 this.editable = !this.editable
                 let userInfo = document.querySelector('#userInfo')
-                let addressInfo = document.querySelector('#addressInfo')
                 userInfo.style.marginLeft = '20%'
-                addressInfo.style.display = 'block'
             },
             onSubmit() {
                 this.editable = !this.editable
                 //修改样式
                 let userInfo = document.querySelector('#userInfo')
-                let addressInfo = document.querySelector('#addressInfo')
                 userInfo.style.marginLeft = '40%'
-                addressInfo.style.display = 'none'
                 //发送请求
                 this.sendUpdateRequest();
                 this.exit();
